@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HMT.SH.26.004.PLA.QN — DocScan Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh}
+/* ── SIDEBAR LAYOUT ── */
+.app{display:flex;min-height:100vh}
+.sidebar{width:220px;min-height:100vh;background:#111113;border-right:1px solid #1f1f23;padding:20px 0;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+.sidebar-logo{padding:0 20px 20px;border-bottom:1px solid #1f1f23;margin-bottom:16px}
+.sidebar-logo h2{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px}
+.sidebar-logo p{font-size:11px;color:#52525b;margin-top:3px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;font-size:13px;color:#71717a;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{color:#e4e4e7;background:#18181b}
+.nav-item.active{color:#a78bfa;background:#1a1730;border-left-color:#7c3aed}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.main{flex:1;padding:28px;overflow:hidden}
+/* ── HEADER ── */
+.header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid #1f1f23}
+.header h1{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+.header .sub{font-size:12px;color:#52525b}
+.header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-ok{background:#052e16;color:#4ade80;border:1px solid #166534}
+.badge-warn{background:#422006;color:#fb923c;border:1px solid #7c2d12}
+.badge-crit{background:#450a0a;color:#f87171;border:1px solid #7f1d1d}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+.btn-print{background:#27272a;color:#a1a1aa}
+.btn-print:hover{background:#3f3f46;color:#fff}
+/* ── SECTIONS ── */
+.section{display:none}
+.section.active{display:block}
+/* ── PROGRESS ── */
+.progress-card{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:24px;margin-bottom:20px}
+.progress-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.progress-title{font-size:13px;color:#a1a1aa;font-weight:500}
+.progress-pct{font-size:40px;font-weight:700;color:#fff;line-height:1}
+.progress-sub{font-size:11px;color:#52525b;margin-top:4px}
+.bar-track{background:#27272a;border-radius:8px;height:12px;overflow:hidden;margin-bottom:16px}
+.bar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#6366f1,#8b5cf6);box-shadow:0 0 12px rgba(99,102,241,.4);transition:width 1s ease}
+.bar-fill.danger{background:linear-gradient(90deg,#ef4444,#f97316)}
+.meta-row{display:flex;gap:24px;font-size:12px;color:#71717a;flex-wrap:wrap}
+.meta-row strong{color:#e4e4e7}
+/* ── STAT GRID ── */
+.stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:#18181b;border:1px solid #27272a;border-radius:14px;padding:16px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.stat-card:hover{transform:translateY(-2px);border-color:#3f3f46}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.c-blue::before{background:#3b82f6}.c-purple::before{background:#8b5cf6}
+.c-green::before{background:#22c55e}.c-red::before{background:#ef4444}
+.c-indigo::before{background:#6366f1}.c-amber::before{background:#f59e0b}
+.stat-icon{font-size:20px;margin-bottom:8px}
+.stat-count{font-size:28px;font-weight:700;color:#fff;line-height:1;margin-bottom:3px}
+.stat-label{font-size:11px;color:#71717a;font-weight:500}
+/* ── ALERTS ── */
+.alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.alert{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;font-size:13px;font-weight:500}
+.alert.critical{background:#450a0a;border:1px solid #7f1d1d;color:#fca5a5}
+.alert.warning,.alert.error{background:#422006;border:1px solid #7c2d12;color:#fdba74}
+/* ── CHARTS GRID ── */
+.charts-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.charts-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:900px){.charts-2,.charts-3{grid-template-columns:1fr}}
+.chart-card{background:#18181b;border:1px solid #27272a;border-radius:14px;padding:20px}
+.chart-card.full{grid-column:1/-1}
+.chart-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.chart-wrap{position:relative;height:240px}
+.chart-wrap.tall{height:300px}
+/* ── TABLE ── */
+.tbl-card{background:#18181b;border:1px solid #27272a;border-radius:14px;padding:20px;margin-bottom:20px}
+.tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.tbl-title{font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:8px}
+.cnt{background:#27272a;color:#a1a1aa;padding:2px 7px;border-radius:8px;font-size:11px}
+.search-box{background:#111113;border:1px solid #27272a;border-radius:8px;padding:6px 12px;font-size:12px;color:#e4e4e7;outline:none;width:220px}
+.search-box:focus{border-color:#6366f1}
+.export-btn{background:#1e1e24;border:1px solid #3f3f46;border-radius:8px;padding:5px 12px;font-size:11px;color:#a1a1aa;cursor:pointer;white-space:nowrap;transition:all .15s}
+.export-btn:hover{background:#6366f1;border-color:#6366f1;color:#fff}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:9px 10px;color:#52525b;font-weight:500;border-bottom:1px solid #27272a;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+td{padding:9px 10px;border-bottom:1px solid #1a1a1e;color:#d4d4d8;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1f1f23}
+.mono{font-family:'Consolas',monospace;font-size:11px;color:#a78bfa;white-space:normal;word-break:break-all}
+.err-text{color:#f87171;font-size:11px}
+.chip{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;white-space:nowrap}
+.chip-err{background:#450a0a;color:#f87171}
+.chip-warn{background:#422006;color:#fbbf24}
+.chip-ok{background:#052e16;color:#4ade80}
+.empty{text-align:center;padding:36px;color:#3f3f46;font-size:13px}
+/* ── MISC ── */
+.footer{text-align:center;color:#27272a;font-size:11px;margin-top:32px;padding-top:20px;border-top:1px solid #1a1a1e}
+.hidden{display:none!important}
+@media print{.sidebar,.btn-print{display:none}.main{padding:0}.app{display:block}}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="nav">
+    <div class="sidebar-logo">
+      <h2>📋 DocScan</h2>
+      <p id="nav-proj">HMT_REAL</p>
+    </div>
+    <div class="nav-item active" onclick="showSection('overview')" id="nav-overview">
+      <span class="nav-icon">📊</span> Tổng quan
+    </div>
+    <div class="nav-item" onclick="showSection('charts')" id="nav-charts">
+      <span class="nav-icon">📈</span> Biểu đồ
+    </div>
+    <div class="nav-item" onclick="showSection('errors')" id="nav-errors">
+      <span class="nav-icon">🚨</span> Danh sách lỗi
+    </div>
+    <div class="nav-item" onclick="showSection('persons')" id="nav-persons">
+      <span class="nav-icon">👥</span> Nhân viên
+    </div>
+    <div class="nav-item" onclick="showSection('daily')" id="nav-daily">
+      <span class="nav-icon">📅</span> Sản lượng ngày
+    </div>
+    <div class="nav-item" onclick="showSection('crosscheck')" id="nav-crosscheck">
+      <span class="nav-icon">⚖️</span> Đối chiếu Local/Drive
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- HEADER -->
+    <div class="header">
+      <div>
+        <h1>HMT.SH.26.004.PLA.QN</h1>
+        <div class="sub">Mã dự án: HMT_REAL &nbsp;·&nbsp; Cập nhật: 10/07/2026 11:30</div>
+      </div>
+      <div class="header-right">
+        <div id="status-badge"></div>
+        <button class="btn btn-print" onclick="window.print()">🖨️ In báo cáo</button>
+      </div>
+    </div>
+
+    <!-- ══════════ OVERVIEW ══════════ -->
+    <div class="section active" id="sec-overview">
+
+      <!-- Progress -->
+      <div class="progress-card">
+        <div class="progress-header">
+          <div>
+            <div class="progress-title">Tiến độ hoàn thành (Quy đổi A4)</div>
+            <div class="meta-row" id="pmeta" style="margin-top:8px"></div>
+          </div>
+          <div style="text-align:right">
+            <div class="progress-pct" id="pct-text">—</div>
+            <div class="progress-sub" id="pct-sub"></div>
+          </div>
+        </div>
+        <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="alerts" id="alerts"></div>
+
+      <!-- Stats 6-card -->
+      <div class="stats-grid">
+        <div class="stat-card c-indigo">
+          <div class="stat-icon">📊</div>
+          <div class="stat-count" id="s-total">0</div>
+          <div class="stat-label">Tổng file</div>
+        </div>
+        <div class="stat-card c-green">
+          <div class="stat-icon">✅</div>
+          <div class="stat-count" id="s-ok">0</div>
+          <div class="stat-label">File hợp lệ</div>
+        </div>
+        <div class="stat-card c-red">
+          <div class="stat-icon">❌</div>
+          <div class="stat-count" id="s-err">0</div>
+          <div class="stat-label">File lỗi</div>
+        </div>
+        <div class="stat-card c-blue">
+          <div class="stat-icon">📄</div>
+          <div class="stat-count" id="s-a3">0</div>
+          <div class="stat-label">Tờ A3</div>
+        </div>
+        <div class="stat-card c-purple">
+          <div class="stat-icon">📃</div>
+          <div class="stat-count" id="s-a4">0</div>
+          <div class="stat-label">Tờ A4</div>
+        </div>
+        <div class="stat-card c-amber">
+          <div class="stat-icon">🔢</div>
+          <div class="stat-count" id="s-qr">0</div>
+          <div class="stat-label">Quy đổi A4</div>
+        </div>
+      </div>
+
+      <!-- Quick charts -->
+      <div class="charts-2">
+        <div class="chart-card">
+          <div class="chart-title">👤 Sản lượng theo nhân viên</div>
+          <div class="chart-wrap"><canvas id="chart-person-ov"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">📅 Sản lượng 7 ngày gần nhất</div>
+          <div class="chart-wrap"><canvas id="chart-day-ov"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ CHARTS ══════════ -->
+    <div class="section" id="sec-charts">
+      <div class="charts-2">
+        <div class="chart-card">
+          <div class="chart-title">📊 So sánh OK vs Lỗi — từng NV</div>
+          <div class="chart-wrap tall"><canvas id="chart-person-detail"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">🎯 Tỉ lệ file hợp lệ</div>
+          <div class="chart-wrap tall"><canvas id="chart-pie"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-card full">
+        <div class="chart-title">📉 Sản lượng theo ngày (toàn bộ)</div>
+        <div class="chart-wrap tall"><canvas id="chart-day-full"></canvas></div>
+      </div>
+      <div class="chart-card full" id="burndown-card" style="margin-top:14px">
+        <div class="chart-title">🔥 Burndown — tiến độ vs mục tiêu</div>
+        <div class="chart-wrap tall"><canvas id="chart-burndown"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ══════════ ERRORS ══════════ -->
+    <div class="section" id="sec-errors">
+      <div class="tbl-card">
+        <div class="tbl-header">
+          <div class="tbl-title">🚨 File lỗi <span class="cnt" id="err-cnt-lbl">0</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="search-box" id="err-search" placeholder="🔍 Tìm file, người, lỗi..." oninput="filterErrors()">
+            <button class="export-btn" onclick="exportCSV('err-tbl','loi_file')">&#11015; CSV</button>
+          </div>
+
+        </div>
+        <div id="err-tbl" style="overflow-x:auto;max-height:600px;overflow-y:auto"></div>
+      </div>
+      <div class="tbl-card">
+        <div class="tbl-header">
+          <div class="tbl-title">📁 Lỗi cấu trúc folder <span class="cnt" id="fold-cnt">0</span></div>
+        </div>
+        <div id="fold-tbl"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ PERSONS ══════════ -->
+    <div class="section" id="sec-persons">
+      <div class="tbl-card">
+        <div class="tbl-header">
+          <div class="tbl-title">👥 Chi tiết sản lượng từng nhân viên</div>
+          <button class="export-btn" onclick="exportCSV('person-tbl','nhan_vien')">&#11015; CSV</button>
+        </div>
+        <div id="person-tbl" style="overflow-x:auto"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ DAILY ══════════ -->
+    <div class="section" id="sec-daily">
+      <div class="tbl-card">
+        <div class="tbl-header">
+          <div class="tbl-title">📅 Sản lượng theo ngày scan (từ ngày tạo file)</div>
+        </div>
+        <div id="daily-tbl" style="overflow-x:auto;max-height:600px;overflow-y:auto"></div>
+      </div>
+    </div>
+
+    <!-- ════════ CROSS-CHECK ════════ -->
+    <div class="section" id="sec-crosscheck">
+      <div class="tbl-card">
+        <div class="tbl-header">
+          <div class="tbl-title">⚖️ Đối chiếu: NV khai (local) vs Drive thực tế</div>
+        </div>
+        <div id="cc-alert-box" style="margin-bottom:14px"></div>
+        <div id="cc-no-log" class="empty" style="display:none">
+          ⚠️ Chưa có dữ liệu NV khai (chưa có scan_events.json)<br>
+          <small style="color:#52525b">NV cần mở app Nhân Viên và Submit sản lượng cuối ngày</small>
+        </div>
+        <div id="cc-tbl" style="overflow-x:auto"></div>
+      </div>
+      <div class="tbl-card" id="cc-day-card" style="display:none">
+        <div class="tbl-header">
+          <div class="tbl-title">📅 Chi tiết lệch số theo ngày — chọn nhân viên:</div>
+          <select id="cc-person-sel" onchange="renderCCDay()" style="background:#111113;color:#e4e4e7;border:1px solid #27272a;padding:6px 10px;border-radius:8px;font-size:12px">
+          </select>
+        </div>
+        <div id="cc-day-tbl" style="overflow-x:auto;max-height:400px;overflow-y:auto"></div>
+      </div>
+    </div>
+
+    <div class="footer">DocScan Dashboard v2.0 · Tự động tạo bởi scan_reporter.py · 10/07/2026 11:30</div>
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+const D = {"generated_at": "2026-07-10T11:30:17.892625", "project_dir": "H:\\Shared drives\\HMT.SH.26.004.PLA.QN", "project_id": "HMT_REAL", "project_name": "HMT.SH.26.004.PLA.QN", "config": {"project_name": "HMT.SH.26.004.PLA.QN", "project_id": "HMT_REAL", "ma_co_quan": "UBND", "raw_folder": "", "team": [], "target": {"total_pages_a4": 50000, "deadline": "2026-12-31", "notes": "Du an dong bo Read-Only tu H:"}, "naming_convention": {"regex": "^.*\\.pdf$", "description": "Mọi file pdf", "example": "01.pdf", "constraints": {}}, "folder_structure": {"levels_after_person": []}, "quality_rules": {"min_file_size_kb": 0, "allowed_formats": [".pdf", ".tif"], "check_pdf_valid": false}}, "folder_errors": [{"type": "MISSING_FOLDER", "path": "H:\\Shared drives\\HMT.SH.26.004.PLA.QN\\01_RAW_SCAN", "msg": "Thiếu thư mục '01_RAW_SCAN'", "path_short": "Shared drives/HMT.SH.26.004.PLA.QN/01_RAW_SCAN"}], "files": {"ok": [], "errors": [], "warnings_only": []}, "stats": {"total_files": 0, "total_ok": 0, "total_errors": 0, "total_warnings": 0, "total_a3": 0, "total_a4": 0, "qr_a4": 0}, "per_person": {}, "per_day": {}, "progress": {}, "alerts": [], "scan_meta": {}};
+const p = D.progress; const s = D.stats;
+const pp = D.per_person || {};
+const pd = D.per_day || {};
+const ppKeys = Object.keys(pp).sort();
+const pdKeys = Object.keys(pd).sort();
+
+// ── Navigation ───────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('nav-'+id).classList.add('active');
+}
+
+// ── Status Badge ────────────────────────────────────────────
+const hasCrit = (p.alerts||[]).some(a=>a.level==='critical');
+const hasErr  = s.total_errors > 0;
+document.getElementById('status-badge').innerHTML = hasCrit
+  ? '<span class="badge badge-crit">🔴 Cần xử lý ngay</span>'
+  : hasErr ? '<span class="badge badge-warn">🟡 Có lỗi</span>'
+  : '<span class="badge badge-ok">🟢 Bình thường</span>';
+
+// ── Progress ────────────────────────────────────────────────
+const pct = p.pct || 0;
+const target = p.target_qr_a4 || p.target_pages || 0;
+const done   = p.done_qr_a4 || s.qr_a4 || 0;
+document.getElementById('pct-text').textContent = target ? pct + '%' : 'Chưa đặt mục tiêu';
+document.getElementById('pct-sub').textContent  = target ? `${done.toLocaleString()} / ${target.toLocaleString()} trang A4` : '';
+setTimeout(() => { document.getElementById('bar').style.width = Math.min(100,pct) + '%'; }, 200);
+if(pct >= 90) document.getElementById('bar').classList.add('danger');
+
+let meta = '';
+if(target) meta += `<span>Mục tiêu: <strong>${target.toLocaleString()} A4</strong></span>`;
+meta += `<span>Đã scan: <strong>${done.toLocaleString()} A4</strong></span>`;
+if(p.days_left !== null && p.days_left !== undefined) {
+  const col = p.days_left < 0 ? 'color:#f87171' : p.days_left <= 7 ? 'color:#fb923c' : '';
+  const txt = p.days_left < 0 ? `Quá hạn ${Math.abs(p.days_left)} ngày` : `Còn ${p.days_left} ngày`;
+  meta += `<span>Deadline: <strong style="${col}">${txt}</strong></span>`;
+}
+if(target && done) {
+  const remaining = target - done;
+  meta += remaining > 0 ? `<span>Còn lại: <strong>${remaining.toLocaleString()} trang</strong></span>` : '';
+}
+// Tốc độ thực tế vs yêu cầu
+if(p.avg_per_day !== null && p.avg_per_day !== undefined) {
+  meta += `<span>Tốc độ thực: <strong>${p.avg_per_day} trang/ngày</strong></span>`;
+}
+if(p.required_per_day !== null && p.required_per_day !== undefined) {
+  const req = p.required_per_day;
+  const avg = p.avg_per_day || 0;
+  const rCol = avg >= req ? 'color:#4ade80' : avg >= req*0.8 ? 'color:#fb923c' : 'color:#f87171';
+  meta += `<span>Cần/ngày: <strong style="${rCol}">${req} trang</strong></span>`;
+}
+document.getElementById('pmeta').innerHTML = meta;
+
+// ── Alerts ──────────────────────────────────────────────────
+const aEl = document.getElementById('alerts');
+(p.alerts||[]).forEach(a => {
+  aEl.innerHTML += `<div class="alert ${a.level}"><span>${a.level==='critical'?'🔴':'🟡'}</span><span>${a.msg}</span></div>`;
+});
+
+// ── Stats ───────────────────────────────────────────────────
+document.getElementById('s-total').textContent = (s.total_files||0).toLocaleString();
+document.getElementById('s-ok').textContent    = (s.total_ok||0).toLocaleString();
+document.getElementById('s-err').textContent   = (s.total_errors||0).toLocaleString();
+document.getElementById('s-a3').textContent    = (s.total_a3||0).toLocaleString();
+document.getElementById('s-a4').textContent    = (s.total_a4||0).toLocaleString();
+document.getElementById('s-qr').textContent    = (s.qr_a4||0).toLocaleString();
+
+// ── Chart helpers ───────────────────────────────────────────
+const COLORS = ['#6366f1','#8b5cf6','#ec4899','#f59e0b','#10b981','#3b82f6','#14b8a6','#f97316'];
+const chartOpts = (extra={}) => ({
+  responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:'#71717a',font:{size:11}}}, ...extra.plugins},
+  scales:{
+    x:{ticks:{color:'#52525b'},grid:{color:'#1f1f23'}},
+    y:{ticks:{color:'#52525b'},grid:{color:'#1f1f23'},beginAtZero:true},
+    ...(extra.scales||{})
+  }, ...(extra)
+});
+
+// ── Overview Chart 1: per-person bar ────────────────────────
+new Chart(document.getElementById('chart-person-ov').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:ppKeys,
+    datasets:[{
+      label:'Quy đổi A4',
+      data:ppKeys.map(k=>pp[k].qr_a4||0),
+      backgroundColor:'rgba(99,102,241,0.8)', borderColor:'#6366f1',
+      borderWidth:1, borderRadius:6
+    }]
+  },
+  options:chartOpts({plugins:{legend:{display:false}}})
+});
+
+// ── Overview Chart 2: last 7 days ───────────────────────────
+const last7 = pdKeys.slice(-7);
+new Chart(document.getElementById('chart-day-ov').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:last7.map(d=>d.slice(5)),
+    datasets:[{
+      label:'QĐ A4/ngày',
+      data:last7.map(k=>pd[k].qr_a4||((pd[k].a3||0)*2+(pd[k].a4||0))),
+      backgroundColor:'rgba(139,92,246,0.75)', borderColor:'#8b5cf6',
+      borderWidth:1, borderRadius:6
+    }]
+  },
+  options:chartOpts({plugins:{legend:{display:false}}})
+});
+
+// ── Charts Tab ──────────────────────────────────────────────
+// Per-person OK vs Err
+new Chart(document.getElementById('chart-person-detail').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:ppKeys,
+    datasets:[
+      {label:'File OK', data:ppKeys.map(k=>pp[k].ok||0), backgroundColor:'rgba(34,197,94,0.75)', borderColor:'#22c55e', borderWidth:1, borderRadius:4},
+      {label:'File lỗi', data:ppKeys.map(k=>pp[k].errors||0), backgroundColor:'rgba(239,68,68,0.75)', borderColor:'#ef4444', borderWidth:1, borderRadius:4}
+    ]
+  },
+  options:chartOpts()
+});
+
+// Donut pie — valid vs error
+new Chart(document.getElementById('chart-pie').getContext('2d'), {
+  type:'doughnut',
+  data:{
+    labels:['Hợp lệ','Lỗi'],
+    datasets:[{
+      data:[s.total_ok||0, s.total_errors||0],
+      backgroundColor:['rgba(34,197,94,0.8)','rgba(239,68,68,0.8)'],
+      borderColor:['#22c55e','#ef4444'], borderWidth:2
+    }]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#71717a',font:{size:12}},position:'bottom'}}}
+});
+
+// Full day chart
+if(pdKeys.length) {
+  new Chart(document.getElementById('chart-day-full').getContext('2d'), {
+    type:'line',
+    data:{
+      labels:pdKeys,
+      datasets:[
+        {label:'QĐ A4/ngày', data:pdKeys.map(k=>(pd[k].a3||0)*2+(pd[k].a4||0)),
+          borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,.15)',
+          fill:true, tension:0.4, pointBackgroundColor:'#8b5cf6', pointRadius:4},
+        {label:'A3', data:pdKeys.map(k=>pd[k].a3||0),
+          borderColor:'#3b82f6', backgroundColor:'transparent',
+          tension:0.4, pointRadius:3, borderDash:[4,4]}
+      ]
+    },
+    options:chartOpts()
+  });
+} else {
+  document.getElementById('chart-day-full').parentNode.innerHTML = '<div class="empty">Chưa có dữ liệu per-day — chạy lại scan</div>';
+}
+
+// Burndown chart — dùng timeline thực (start_date → deadline)
+(function() {
+  const cfg  = D.config || {};
+  const tl   = cfg.timeline || {};
+  const tgt  = D.progress.target_qr_a4 || 0;
+  const startStr    = tl.start_date    || '';
+  const deadlineStr = tl.deadline_final || tl.deadline_scan || '';
+
+  if(!tgt || !startStr || !deadlineStr) {
+    document.getElementById('burndown-card').innerHTML =
+      '<div class="chart-title">🔥 Burndown</div><div class="empty">Cần đặt start_date, deadline, target trong project_config.json</div>';
+    return;
+  }
+
+  // Tạo array ngày từ start → today (không vẽ tương lai)
+  const start    = new Date(startStr);
+  const deadline = new Date(deadlineStr);
+  const today    = new Date();
+  today.setHours(0,0,0,0);
+
+  const totalDays = Math.round((deadline - start) / 86400000);
+  const elapsed   = Math.round((today - start) / 86400000);
+
+  // Tính cumulative thực tế theo ngày
+  // Dùng per_day từ data (đã sorted)
+  const dayMap = {};
+  Object.keys(pd).forEach(k => { dayMap[k] = (pd[k].a3||0)*2 + (pd[k].a4||0); });
+
+  const labels = [], actualArr = [], idealArr = [], targetArr = [];
+  let cumActual = 0;
+  const endDay = new Date(Math.min(today.getTime(), deadline.getTime()));
+
+  for(let d = new Date(start); d <= endDay; d.setDate(d.getDate()+1)) {
+    const key = d.toISOString().slice(0,10);
+    const daysDone = Math.round((d - start) / 86400000);
+    cumActual += (dayMap[key] || 0);
+    labels.push(key);
+    actualArr.push(cumActual);
+    idealArr.push(Math.round(tgt * daysDone / totalDays));
+    targetArr.push(tgt);
+  }
+
+  if(!labels.length) {
+    document.getElementById('burndown-card').innerHTML =
+      '<div class="chart-title">🔥 Burndown</div><div class="empty">Chưa có ngày scan nào</div>';
+    return;
+  }
+
+  new Chart(document.getElementById('chart-burndown').getContext('2d'), {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {label:'Thực tế tích lũy', data:actualArr,
+          borderColor:'#6366f1', backgroundColor:'rgba(99,102,241,.15)',
+          fill:true, tension:0.4, pointRadius:2, pointHoverRadius:5},
+        {label:'Kế hoạch lý tưởng', data:idealArr,
+          borderColor:'#52525b', backgroundColor:'transparent',
+          tension:0, borderDash:[6,4], pointRadius:0},
+        {label:'Mục tiêu', data:targetArr,
+          borderColor:'#22c55e', backgroundColor:'transparent',
+          tension:0, borderDash:[3,3], pointRadius:0, borderWidth:1}
+      ]
+    },
+    options: Object.assign(chartOpts(), {
+      scales: { x: { ticks: { maxTicksLimit: 10, color:'#71717a', font:{size:10} } }, y: { ticks: { color:'#71717a', font:{size:10} } } }
+    })
+  });
+})();
+
+// ── Error table ─────────────────────────────────────────────
+const errs = D.files.errors || [];
+let errRows = errs;
+document.getElementById('err-cnt-lbl').textContent = errs.length;
+
+function renderErrTable(rows) {
+  if(!rows.length) {
+    document.getElementById('err-tbl').innerHTML = '<div class="empty">✅ Không có lỗi</div>';
+    return;
+  }
+  document.getElementById('err-tbl').innerHTML = `
+    <table><thead><tr>
+      <th>#</th><th>File</th><th>Người scan</th><th>Ngày scan</th><th>Kích thước</th><th>Lỗi</th>
+    </tr></thead><tbody>${
+    rows.map((e,i)=>`<tr>
+      <td style="color:#52525b">${i+1}</td>
+      <td class="mono">${e.filename}</td>
+      <td>${e.person||'—'}</td>
+      <td>${e.scan_date||'—'}</td>
+      <td style="color:#71717a">${e.size_kb}KB</td>
+      <td class="err-text">${(e.errors||[]).join('<br>')}</td>
+    </tr>`).join('')
+  }</tbody></table>`;
+}
+renderErrTable(errs);
+
+function filterErrors() {
+  const q = document.getElementById('err-search').value.toLowerCase();
+  const filtered = errs.filter(e =>
+    e.filename.toLowerCase().includes(q) ||
+    (e.person||'').toLowerCase().includes(q) ||
+    (e.errors||[]).join(' ').toLowerCase().includes(q)
+  );
+  renderErrTable(filtered);
+}
+
+// ── Folder errors ───────────────────────────────────────────
+const ferrs = D.folder_errors || [];
+document.getElementById('fold-cnt').textContent = ferrs.length;
+document.getElementById('fold-tbl').innerHTML = ferrs.length
+  ? `<table><thead><tr><th>Loại</th><th>Đường dẫn</th><th>Mô tả</th></tr></thead><tbody>${
+      ferrs.map(e=>`<tr>
+        <td><span class="chip chip-err">${e.type}</span></td>
+        <td class="mono">${(e.path_short||e.path||'').slice(-60)}</td>
+        <td class="err-text">${e.msg}</td>
+      </tr>`).join('')
+    }</tbody></table>`
+  : '<div class="empty">✅ Cấu trúc folder hợp lệ</div>';
+
+// ── Person table ─────────────────────────────────────────────
+document.getElementById('person-tbl').innerHTML = ppKeys.length
+  ? `<table><thead><tr>
+      <th>Nhân viên</th><th>A3</th><th>A4</th><th>Quy đổi A4</th>
+      <th>File OK</th><th>File lỗi</th><th>Tỉ lệ OK</th>
+    </tr></thead><tbody>${
+    ppKeys.map(k=>{
+      const v=pp[k];
+      const total=v.ok+v.errors;
+      const pct=total?Math.round(v.ok/total*100):0;
+      const errCol = v.errors>0?'#f87171':'#4ade80';
+      return `<tr>
+        <td><strong style="color:#a78bfa">${k}</strong></td>
+        <td>${v.a3||0}</td><td>${v.a4||0}</td>
+        <td><strong>${v.qr_a4||0}</strong></td>
+        <td style="color:#4ade80">${v.ok||0}</td>
+        <td style="color:${errCol}">${v.errors||0}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="flex:1;background:#27272a;border-radius:4px;height:6px">
+              <div style="width:${pct}%;height:100%;background:${pct>90?'#22c55e':pct>70?'#f59e0b':'#ef4444'};border-radius:4px"></div>
+            </div>
+            <span style="font-size:11px;color:#a1a1aa;width:32px">${pct}%</span>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')
+  }</tbody></table>`
+  : '<div class="empty">Chưa có dữ liệu</div>';
+
+// ── Daily table ──────────────────────────────────────────────
+const allDays = pdKeys.slice().reverse();
+document.getElementById('daily-tbl').innerHTML = allDays.length
+  ? `<table><thead><tr>
+      <th>Ngày</th><th>A3</th><th>A4</th><th>Quy đổi A4</th><th>Biểu đồ nhỏ</th>
+    </tr></thead><tbody>${
+    allDays.map(day=>{
+      const v=pd[day];
+      const qr=(v.a3||0)*2+(v.a4||0);
+      const maxQ = Math.max(...pdKeys.map(d=>(pd[d].a3||0)*2+(pd[d].a4||0)), 1);
+      const pct = Math.round(qr/maxQ*100);
+      return `<tr>
+        <td style="color:#a1a1aa;font-family:monospace">${day}</td>
+        <td>${v.a3||0}</td><td>${v.a4||0}</td>
+        <td><strong>${qr}</strong></td>
+        <td>
+          <div style="width:160px;background:#27272a;border-radius:4px;height:8px">
+            <div style="width:${pct}%;height:100%;background:#6366f1;border-radius:4px"></div>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')
+  }</tbody></table>`
+  : '<div class="empty">Chưa có dữ liệu ngày — chạy lại scan</div>';
+
+// ── Cross-check ──────────────────────────────────────────────
+const cc = D.crosscheck || {};
+
+if(!cc.has_log) {
+  document.getElementById('cc-no-log').style.display = 'block';
+} else {
+  // Alerts
+  const ccAlerts = cc.alerts || [];
+  const ccBox = document.getElementById('cc-alert-box');
+  ccAlerts.forEach(a => {
+    ccBox.innerHTML += `<div class="alert ${a.level}" style="margin-bottom:6px">
+      <span>${a.level==='critical'?'🔴':'🟡'}</span><span>${a.msg}</span>
+    </div>`;
+  });
+
+  // Per-person table
+  const ccPP = cc.per_person || {};
+  const ccKeys = Object.keys(ccPP).sort();
+  if(ccKeys.length) {
+    document.getElementById('cc-tbl').innerHTML = `
+      <table><thead><tr>
+        <th>Nhân viên</th>
+        <th>NV khai (local)</th>
+        <th>Drive thực tế</th>
+        <th>Delta</th>
+        <th>% lệch</th>
+        <th>Trạng thái</th>
+      </tr></thead><tbody>${
+      ccKeys.map(k => {
+        const v = ccPP[k];
+        const dCol = v.delta === 0 ? '#4ade80'
+          : v.delta > 0 ? '#60a5fa'   // Drive nhiều hơn (xanh)
+          : v.delta < -0 ? '#f87171'  // Drive thiếu (đỏ)
+          : '#71717a';
+        const status = v.status === 'match' ? '<span class="chip chip-ok">✅ Khớp</span>'
+          : v.status === 'drive_less' ? '<span class="chip chip-err">⬇ Drive thiếu</span>'
+          : '<span class="chip chip-warn">⬆ Drive thêm</span>';
+        return `<tr>
+          <td><strong style="color:#a78bfa">${k}</strong></td>
+          <td>${v.claimed.toLocaleString()}</td>
+          <td>${v.actual.toLocaleString()}</td>
+          <td style="color:${dCol};font-weight:600">${v.delta >= 0 ? '+' : ''}${v.delta}</td>
+          <td style="color:${dCol}">${v.delta_pct}%</td>
+          <td>${status}</td>
+        </tr>`;
+      }).join('')
+    }</tbody></table>`;
+
+    // Populate person selector for per-day drill-down
+    const ccDayData = cc.per_day_person || {};
+    const ccPersonsWithDay = Object.keys(ccDayData).sort();
+    if(ccPersonsWithDay.length) {
+      document.getElementById('cc-day-card').style.display = 'block';
+      const sel = document.getElementById('cc-person-sel');
+      ccPersonsWithDay.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p; opt.textContent = p;
+        sel.appendChild(opt);
+      });
+    }
+  }
+}
+
+function renderCCDay() {
+  const person = document.getElementById('cc-person-sel').value;
+  const ccDayData = (D.crosscheck || {}).per_day_person || {};
+  const days = ccDayData[person] || {};
+  const dayKeys = Object.keys(days).sort().reverse();
+  document.getElementById('cc-day-tbl').innerHTML = dayKeys.length ? `
+    <table><thead><tr>
+      <th>Ngày</th><th>NV khai</th><th>Drive</th>
+      <th>Delta</th><th>Tình trạng</th>
+    </tr></thead><tbody>${
+    dayKeys.map(day => {
+      const v = days[day];
+      const dCol = v.delta === 0 ? '#4ade80' : v.delta < 0 ? '#f87171' : '#60a5fa';
+      const note = v.delta === 0 ? '✅ Khớp'
+        : v.delta < 0 ? `⬇ Drive thiếu ${Math.abs(v.delta)}`
+        : `⬆ Drive thêm ${v.delta}`;
+      return `<tr>
+        <td style="font-family:monospace;color:#a1a1aa">${day}</td>
+        <td>${v.claimed}</td>
+        <td>${v.actual}</td>
+        <td style="color:${dCol};font-weight:600">${v.delta >= 0 ? '+' : ''}${v.delta}</td>
+        <td style="color:${dCol}">${note}</td>
+      </tr>`;
+    }).join('')
+  }</tbody></table>` : '<div class="empty">Không có dữ liệu</div>';
+}
+// Init render cho person đầu tiên
+if(document.getElementById('cc-person-sel') && document.getElementById('cc-person-sel').options.length) {
+  renderCCDay();
+}
+// ── Export CSV ──────────────────────────────────────────────
+function exportCSV(tblId, filename) {
+  const tbl = document.getElementById(tblId);
+  if (!tbl) return;
+  const rows = tbl.querySelectorAll('tr');
+  if (!rows.length) return;
+  const out = [];
+  rows.forEach(function(row) {
+    const cells = row.querySelectorAll('th,td');
+    const vals  = Array.from(cells).map(function(c) {
+      let t = (c.innerText||c.textContent||'').replace(/[	
+
+ ]+/g,' ').trim();
+      if(t.indexOf(',') >= 0 || t.indexOf('"') >= 0) t = '"' + t.split('"').join('""') + '"';
+      return t;
+    });
+    out.push(vals.join(','));
+  });
+  const NL   = String.fromCharCode(10);
+  const BOM  = String.fromCharCode(65279);
+  const blob = new Blob([BOM + out.join(NL)], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = filename + '_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Footer tooltip: thời gian sinh báo cáo ──────────────────
+const genAt = D.generated_at || '';
+if(genAt) {
+  const dt  = new Date(genAt);
+  const fmt = dt.toLocaleString('vi-VN', {hour12:false});
+  const footer = document.querySelector('.footer');
+  if(footer) footer.title = 'Báo cáo sinh lúc: ' + fmt;
+}
+
+</script>
+
+</body>
+</html>
