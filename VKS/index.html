@@ -75,7 +75,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-06-30</strong> (0 ngày)</span>
     <span style="background:#052e16;color:#86efac;border:1px solid #166534;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">✅ Hoàn thành</span>
-    <span>Cập nhật: 13/07/2026 18:18</span>
+    <span>Cập nhật: 13/07/2026 18:28</span>
     <span class="tag-na">Drive: chưa scan</span>
     <span class="tag-excel">🟠 Excel: 2025-12-19</span>
   </div>
@@ -232,7 +232,7 @@ canvas{max-height:230px}
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:18
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:28
   </div>
 </div>
 
@@ -288,8 +288,8 @@ canvas{max-height:230px}
       document.getElementById('modalNVSummary').textContent = `Tổng: ${data.total_qr_a4.toLocaleString()} A4 · ${data.total_ho_so.toLocaleString()} Hồ sơ`;
 
       const days = Object.keys(data.per_day).filter(d => d !== 'unknown').sort();
-      // Lấy 14 ngày gần nhất có data
-      const recentDays = days.slice(-14);
+      // Hiển thị toàn bộ dữ liệu thay vì 14 ngày
+      const recentDays = days;
       const _labels = recentDays.map(d => d.substring(5)); // MM-DD
       const values = recentDays.map(d => data.per_day[d].qr_a4);
 
