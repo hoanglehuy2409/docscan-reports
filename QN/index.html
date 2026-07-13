@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QN — HMT.SH.26.004.PLA.QN — DocScan Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f172a;--surf:#1e293b;--border:#334155;--text:#f1f5f9;--muted:#94a3b8;
+      --drive:#3b82f6;--excel:#f97316;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+header{background:linear-gradient(135deg,#1e3a5f,#1e293b);padding:20px 32px;border-bottom:1px solid var(--border)}
+header h1{font-size:20px;font-weight:700}
+.meta{color:var(--muted);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.container{max-width:1400px;margin:0 auto;padding:24px 32px}
+
+/* Source indicator */
+.source-strip{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.source-card{border-radius:12px;padding:20px;border:2px solid}
+.source-card.drive{background:#172554;border-color:#3b82f6}
+.source-card.excel{background:#431407;border-color:#f97316}
+.source-card .src-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.source-card .src-label.drive{color:#93c5fd}
+.source-card .src-label.excel{color:#fdba74}
+.source-card .src-value{font-size:32px;font-weight:700;margin-bottom:4px}
+.source-card .src-sub{font-size:12px;color:var(--muted)}
+.source-card .src-pct{font-size:14px;font-weight:600;margin-top:8px}
+
+.match-row{text-align:center;margin-bottom:20px;padding:12px;background:var(--surf);border-radius:8px;border:1px solid var(--border)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:16px}
+.kpi .label{color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.kpi .value{font-size:24px;font-weight:700;margin:4px 0 2px}
+.kpi .sub{font-size:12px;color:var(--muted)}
+
+.card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card h3{font-size:14px;font-weight:600;margin-bottom:14px;color:#e2e8f0}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.grid-2,.source-strip{grid-template-columns:1fr}}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+td{padding:9px 10px;border-bottom:1px solid #1e293b}
+tr:hover td{background:#1e293b66}
+
+.tag-drive{background:#172554;color:#93c5fd;border:1px solid #3b82f680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-excel{background:#431407;color:#fdba74;border:1px solid #f9731680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-na{background:#1e293b;color:#64748b;border:1px solid #334155;padding:2px 8px;border-radius:12px;font-size:11px}
+
+.progress-bar{background:#0f172a;border-radius:8px;height:14px;overflow:hidden;margin:10px 0}
+.progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#3b82f6,#3b82f6cc)}
+.progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+canvas{max-height:230px}
+.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:20px}
+.no-data{color:#64748b;font-style:italic;font-size:13px;padding:16px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 QN — HMT.SH.26.004.PLA.QN</h1>
+  <div class="meta">
+    <span>Deadline: <strong>2026-12-31</strong> (171 ngày)</span>
+    <span>Cập nhật: 13/07/2026 16:10</span>
+    <span class="tag-drive">🔵 Drive: 2026-07-12</span>
+    <span class="tag-na">Excel: chưa có</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 2 Nguồn phân biệt rõ -->
+  <div class="source-strip">
+    <div class="source-card drive">
+      <div class="src-label drive">🔵 Drive (fitz) — Số thực đếm từ PDF</div>
+      <div class="src-value" style="color:#60a5fa">25,739 <span style="font-size:16px;color:#93c5fd">A4</span></div>
+      <div class="src-pct" style="color:#93c5fd">5.1% mục tiêu</div>
+      <div class="src-sub" style="margin-top:6px">2,221 file · 1,279 A3 · 17,449 A4 · Scan: 2026-07-12</div>
+      <div style="margin-top:10px"><div style="background:#1e293b;border-radius:6px;height:12px;overflow:hidden"><div style="background:#3b82f6;width:5.1%;height:100%;border-radius:6px"></div></div></div>
+    </div>
+    <div class="source-card excel">
+      <div class="src-label excel">🟠 Excel NV — Số NV báo cáo</div>
+      <div class="src-value" style="color:#fb923c">0 <span style="font-size:16px;color:#fdba74">A4</span></div>
+      <div class="src-pct" style="color:#fdba74">0.0% mục tiêu</div>
+      <div class="src-sub" style="margin-top:6px">0 hồ sơ · 0 NV · ? → ?</div>
+      <div style="margin-top:10px"><div style="background:#1e293b;border-radius:6px;height:12px;overflow:hidden"><div style="background:#f97316;width:0.0%;height:100%;border-radius:6px"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Cross-check badge -->
+  
+
+  <!-- Progress overall -->
+  <div class="card">
+    <h3>📈 Tiến độ tổng — Mục tiêu 500,000 A4</h3>
+    <div class="progress-bar"><div class="progress-fill" style="width:5.1%"></div></div>
+    <div class="progress-labels">
+      <span>🔵 Drive: 25,739 A4</span>
+      <span>5.1%</span>
+      <span>🟠 Excel: 0 A4</span>
+    </div>
+  </div>
+
+  <!-- Charts (từ Excel nếu có) -->
+  
+
+  <!-- Tables -->
+  <div class="grid-2">
+    <!-- Drive table -->
+    <div class="card">
+      <h3>🔵 Chi tiết Drive — Theo folder NV</h3>
+      <table><thead><tr><th>Folder</th><th style="text-align:right">Files</th><th style="text-align:right">A3</th><th style="text-align:right">A4</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th></tr></thead><tbody>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">UBND Hải Lạng</td>
+          <td style="text-align:right;font-variant-numeric:tabular-nums">482</td>
+          <td style="text-align:right">463</td>
+          <td style="text-align:right">6,951</td>
+          <td style="text-align:right;color:#60a5fa;font-weight:600">7,881.0</td>
+          <td style="text-align:right;color:#94a3b8">1.6%</td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">UBND Đầm Hà</td>
+          <td style="text-align:right;font-variant-numeric:tabular-nums">1,739</td>
+          <td style="text-align:right">816</td>
+          <td style="text-align:right">10,498</td>
+          <td style="text-align:right;color:#60a5fa;font-weight:600">17,858.0</td>
+          <td style="text-align:right;color:#94a3b8">3.6%</td>
+        </tr></tbody></table>
+    </div>
+    <!-- Excel table -->
+    <div class="card">
+      <h3>🟠 Chi tiết Excel — NV báo cáo</h3>
+      <p class="no-data">Chưa có data Excel. Chạy: <code>docscan_manager.py ingest-excel</code></p>
+    </div>
+  </div>
+
+  <div class="updated">
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 16:10
+  </div>
+</div>
+
+
+</body>
+</html>
