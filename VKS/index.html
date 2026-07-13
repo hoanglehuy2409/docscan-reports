@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VKS — Viện Kiểm Sát TP.HCM — DocScan Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f172a; --surface: #1e293b; --border: #334155;
+    --text: #f1f5f9; --muted: #94a3b8; --accent: #3b82f6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  header { background: linear-gradient(135deg, #1e3a5f 0%, #1e293b 100%); padding: 24px 32px; border-bottom: 1px solid var(--border); }
+  header h1 { font-size: 22px; font-weight: 700; color: #fff; }
+  header .meta { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .kpi .label { color: var(--muted); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+  .kpi .value { font-size: 28px; font-weight: 700; margin: 6px 0 4px; }
+  .kpi .sub { font-size: 12px; color: var(--muted); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: #e2e8f0; }
+
+  .progress-wrap { margin: 12px 0; }
+  .progress-bar { background: #0f172a; border-radius: 8px; height: 16px; overflow: hidden; position: relative; }
+  .progress-fill { height: 100%; border-radius: 8px; transition: width .8s ease; background: linear-gradient(90deg, #22c55e, #22c55ecc); }
+  .progress-label { font-size: 13px; color: var(--muted); margin-top: 6px; display: flex; justify-content: space-between; }
+
+  .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
+  .alert.ok { background: #052e16; color: #86efac; border: 1px solid #166534; }
+  .alert.warning { background: #422006; color: #fcd34d; border: 1px solid #92400e; }
+  .alert.critical { background: #450a0a; color: #fca5a5; border: 1px solid #991b1b; }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { color: var(--muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid #1e293b; }
+  .data-table tr:hover td { background: #1e293b88; }
+  .data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .nv-name { font-weight: 500; color: #e2e8f0; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } .kpi .value { font-size: 22px; } }
+  canvas { max-height: 250px; }
+  .updated { color: var(--muted); font-size: 11px; margin-top: 24px; text-align: center; }
+  .on-track { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; background: #22c55e20; color: #22c55e; border: 1px solid #22c55e40; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📊 VKS — Viện Kiểm Sát TP.HCM</h1>
+  <div class="meta">
+    <span class="on-track">✅ Đúng tiến độ</span>
+    &nbsp;&nbsp;Deadline: 2026-06-30 (0 ngày còn lại)
+    &nbsp;&nbsp;Cập nhật: 12/07/2026 17:05
+  </div>
+</header>
+
+<div class="container">
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="label">Đã hoàn thành (QĐ A4)</div>
+      <div class="value" style="color:#3b82f6">364,664</div>
+      <div class="sub">/ 200,000 mục tiêu</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Tiến độ</div>
+      <div class="value" style="color:#22c55e">182.3%</div>
+      <div class="sub">Còn -164,664 A4</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Tốc độ TB (7 ngày)</div>
+      <div class="value" style="color:#a78bfa">0</div>
+      <div class="sub">A4/ngày (cần: 0)</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Dự kiến xong</div>
+      <div class="value" style="color:#22c55e;font-size:20px">N/A</div>
+      <div class="sub">Deadline: 2026-06-30</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Nhân viên</div>
+      <div class="value">12</div>
+      <div class="sub">0 OK / 12 cần chú ý</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Tổng hồ sơ</div>
+      <div class="value">1,858</div>
+      <div class="sub">Từ 2025-01-12 đến 2025-12-19</div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="card">
+    <h3>📈 Tiến độ tổng thể</h3>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" style="width:100.0%"></div></div>
+      <div class="progress-label"><span>364,664 A4 hoàn thành</span><span>182.3%</span><span>200,000 A4 mục tiêu</span></div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <div class="card">
+    <h3>🚨 Cảnh báo rủi ro</h3>
+    <div class="alert warning">🟡 Diệu Linh: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Hoa: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Hồng: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Hưng: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Thùy Linh: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Như: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Huệ: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Trần Khánh Linh: chưa có data 206 ngày (lần cuối: 2025-12-18)</div>
+<div class="alert warning">🟡 Tuyết Linh: chưa có data 205 ngày (lần cuối: 2025-12-19)</div>
+<div class="alert warning">🟡 Quỳnh: chưa có data 206 ngày (lần cuối: 2025-12-18)</div>
+<div class="alert warning">🟡 Hường: chưa có data 206 ngày (lần cuối: 2025-12-18)</div>
+<div class="alert warning">🟡 Hoàng: chưa có data 226 ngày (lần cuối: 2025-11-28)</div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid-2">
+    <div class="card">
+      <h3>📊 Sản lượng 30 ngày gần nhất (A4/ngày)</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>📈 Tích lũy (A4)</h3>
+      <canvas id="lineChart"></canvas>
+    </div>
+  </div>
+
+  <!-- NV Table -->
+  <div class="card">
+    <h3>👥 Chi tiết theo nhân viên</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nhân viên</th>
+          <th style="text-align:right">QĐ A4</th>
+          <th style="text-align:right">Hồ sơ</th>
+          <th>% Mục tiêu</th>
+          <th style="text-align:right">A4/ngày</th>
+          <th>Lần cuối</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nv-name">Diệu Linh</td>
+          <td class="num">31,378.0</td>
+          <td class="num">219</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:15.7%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">15.7%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Hoa</td>
+          <td class="num">58,925.0</td>
+          <td class="num">258</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:29.5%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">29.5%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Hoàng</td>
+          <td class="num">472.0</td>
+          <td class="num">19</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:0.2%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">0.2%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-11-28</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Huệ</td>
+          <td class="num">28,221.0</td>
+          <td class="num">155</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:14.1%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">14.1%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Hưng</td>
+          <td class="num">38,731.0</td>
+          <td class="num">288</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:19.4%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">19.4%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Hường</td>
+          <td class="num">18,598.0</td>
+          <td class="num">13</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:9.3%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">9.3%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-18</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Hồng</td>
+          <td class="num">55,958.0</td>
+          <td class="num">276</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:28.0%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">28.0%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Như</td>
+          <td class="num">22,788.0</td>
+          <td class="num">177</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:11.4%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">11.4%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Quỳnh</td>
+          <td class="num">14,866.0</td>
+          <td class="num">66</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:7.4%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">7.4%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-18</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Thùy Linh</td>
+          <td class="num">58,504.0</td>
+          <td class="num">277</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:29.3%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">29.3%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Trần Khánh Linh</td>
+          <td class="num">26,176.0</td>
+          <td class="num">63</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:13.1%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">13.1%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-18</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr>
+        <tr>
+          <td class="nv-name">Tuyết Linh</td>
+          <td class="num">10,047.0</td>
+          <td class="num">47</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="background:#1e293b;border-radius:6px;height:10px;overflow:hidden"><div style="background:#3b82f6;width:5.0%;height:100%;border-radius:6px;transition:width .5s"></div></div>
+              <span style="font-size:11px;color:#94a3b8;white-space:nowrap">5.0%</span>
+            </div>
+          </td>
+          <td class="num">0</td>
+          <td style="color:#64748b;font-size:12px">2025-12-19</td>
+          <td><span class="badge" style="background:#ef444420;color:#ef4444;border:1px solid #ef444440">Không data</span></td>
+        </tr></tbody>
+    </table>
+  </div>
+
+  
+        <div class="card">
+          <h3>📅 Gap Days — Ngày không có data</h3>
+          <table class="data-table">
+            <thead><tr><th>Nhân viên</th><th>Gap</th><th>Khoảng thời gian</th></tr></thead>
+            <tbody>
+        <tr>
+          <td>Diệu Linh</td>
+          <td style="color:#ef4444">2 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-12-12 → 2025-12-15</td>
+        </tr>
+        <tr>
+          <td>Như</td>
+          <td style="color:#ef4444">291 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-02-12 → 2025-12-01</td>
+        </tr>
+        <tr>
+          <td>Như</td>
+          <td style="color:#ef4444">2 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-12-11 → 2025-12-14</td>
+        </tr>
+        <tr>
+          <td>Huệ</td>
+          <td style="color:#ef4444">6 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-11-25 → 2025-12-02</td>
+        </tr>
+        <tr>
+          <td>Huệ</td>
+          <td style="color:#ef4444">2 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-12-05 → 2025-12-08</td>
+        </tr>
+        <tr>
+          <td>Huệ</td>
+          <td style="color:#ef4444">2 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-12-12 → 2025-12-15</td>
+        </tr>
+        <tr>
+          <td>Trần Khánh Linh</td>
+          <td style="color:#ef4444">4 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-12-11 → 2025-12-16</td>
+        </tr>
+        <tr>
+          <td>Hường</td>
+          <td style="color:#ef4444">30 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-01-12 → 2025-02-12</td>
+        </tr>
+        <tr>
+          <td>Hường</td>
+          <td style="color:#ef4444">27 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-02-12 → 2025-03-12</td>
+        </tr>
+        <tr>
+          <td>Hường</td>
+          <td style="color:#ef4444">30 ngày</td>
+          <td style="color:#64748b;font-size:12px">2025-03-12 → 2025-04-12</td>
+        </tr></tbody>
+          </table>
+        </div>
+  <div class="updated">Dashboard từ Excel Nhật ký · Cập nhật 12/07/2026 17:05</div>
+</div>
+
+<script>
+const labels = ["02-12", "03-12", "04-12", "05-12", "08-12", "09-12", "10-12", "11-12", "11-25", "11-27", "11-28", "12-01", "12-02", "12-03", "12-04", "12-05", "12-06", "12-07", "12-08", "12-09", "12-10", "12-11", "12-12", "12-13", "12-14", "12-15", "12-16", "12-17", "12-18", "12-19"];
+const dailyData = [3383.0, 1050.0, 1968.0, 846.0, 769.0, 966.0, 1168.0, 898.0, 3893.0, 405.0, 67.0, 2633.0, 10148.0, 11505.0, 17871.0, 16802.0, 9846.0, 5103.0, 12663.0, 19838.0, 25741.0, 22953.0, 7649.0, 16074.0, 17141.0, 12976.0, 18750.0, 44498.0, 52833.0, 23128.0];
+const cumulData = [3383.0, 4433.0, 6401.0, 7247.0, 8016.0, 8982.0, 10150.0, 11048.0, 14941.0, 15346.0, 15413.0, 18046.0, 28194.0, 39699.0, 57570.0, 74372.0, 84218.0, 89321.0, 101984.0, 121822.0, 147563.0, 170516.0, 178165.0, 194239.0, 211380.0, 224356.0, 243106.0, 287604.0, 340437.0, 363565.0];
+
+const chartOpts = {
+  responsive: true, maintainAspectRatio: true,
+  plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1e293b', titleColor: '#f1f5f9', bodyColor: '#94a3b8' } },
+  scales: {
+    x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 10 } } },
+    y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 11 } } }
+  }
+};
+
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: { labels, datasets: [{ data: dailyData, backgroundColor: '#3b82f688', borderColor: '#3b82f6', borderWidth: 1, borderRadius: 3 }] },
+  options: chartOpts
+});
+
+new Chart(document.getElementById('lineChart'), {
+  type: 'line',
+  data: { labels, datasets: [{ data: cumulData, borderColor: '#a78bfa', backgroundColor: '#a78bfa22', fill: true, tension: 0.3, pointRadius: 2 }] },
+  options: chartOpts
+});
+</script>
+</body>
+</html>
