@@ -75,7 +75,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-12-31</strong> (171 ngày)</span>
     
-    <span>Cập nhật: 13/07/2026 18:28</span>
+    <span>Cập nhật: 13/07/2026 18:29</span>
     <span class="tag-drive">🔵 Drive: 2026-07-12</span>
     <span class="tag-excel">🟠 Excel: 2026-07-09</span>
   </div>
@@ -224,7 +224,7 @@ canvas{max-height:230px}
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:28
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:29
   </div>
 </div>
 
@@ -238,8 +238,10 @@ canvas{max-height:230px}
       </div>
       <button class="modal-close" onclick="closeNVModal()">&times;</button>
     </div>
-    <div style="height:250px">
-      <canvas id="nvChart"></canvas>
+    <div style="width:100%; overflow-x:auto; overflow-y:hidden; border-radius:4px" id="chartScrollBox">
+      <div id="chartContainer" style="height:250px; min-width:100%">
+        <canvas id="nvChart"></canvas>
+      </div>
     </div>
   </div>
 </div>
@@ -280,10 +282,20 @@ canvas{max-height:230px}
       document.getElementById('modalNVSummary').textContent = `Tổng: ${data.total_qr_a4.toLocaleString()} A4 · ${data.total_ho_so.toLocaleString()} Hồ sơ`;
 
       const days = Object.keys(data.per_day).filter(d => d !== 'unknown').sort();
-      // Hiển thị toàn bộ dữ liệu thay vì 14 ngày
       const recentDays = days;
       const _labels = recentDays.map(d => d.substring(5)); // MM-DD
       const values = recentDays.map(d => data.per_day[d].qr_a4);
+
+      const chartScrollBox = document.getElementById('chartScrollBox');
+      const chartContainer = document.getElementById('chartContainer');
+      const minBarWidth = 40; // 40px mỗi ngày
+      const requiredWidth = _labels.length * minBarWidth;
+      
+      if (requiredWidth > chartScrollBox.clientWidth) {
+          chartContainer.style.width = requiredWidth + 'px';
+      } else {
+          chartContainer.style.width = '100%';
+      }
 
       const ctx = document.getElementById('nvChart').getContext('2d');
       if (nvChartInstance) nvChartInstance.destroy();
