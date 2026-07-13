@@ -75,7 +75,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-12-31</strong> (171 ngày)</span>
     
-    <span>Cập nhật: 13/07/2026 18:29</span>
+    <span>Cập nhật: 13/07/2026 18:53</span>
     <span class="tag-drive">🔵 Drive: 2026-07-12</span>
     <span class="tag-excel">🟠 Excel: 2026-07-09</span>
   </div>
@@ -151,7 +151,7 @@ canvas{max-height:230px}
     
 
   <!-- Charts (từ Excel nếu có) -->
-  <div class="grid-2"><div class="card"><h3>🟠 Sản lượng Excel 30 ngày (A4/ngày)</h3><canvas id="barChart"></canvas></div><div class="card"><h3>🟠 Tích lũy Excel (A4)</h3><canvas id="lineChart"></canvas></div></div>
+  <div class="grid-2"><div class="card"><h3>🟠 Sản lượng Excel theo ngày (A4)</h3><div style="width:100%;overflow-x:auto;overflow-y:hidden;border-radius:4px" id="globalBarScroll"><div id="globalBarContainer" style="height:230px;min-width:100%"><canvas id="barChart"></canvas></div></div></div><div class="card"><h3>🟠 Tích lũy Excel (A4)</h3><div style="width:100%;overflow-x:auto;overflow-y:hidden;border-radius:4px" id="globalLineScroll"><div id="globalLineContainer" style="height:230px;min-width:100%"><canvas id="lineChart"></canvas></div></div></div></div>
 
   <!-- Tables -->
   <div class="grid-2">
@@ -224,7 +224,7 @@ canvas{max-height:230px}
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:29
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:53
   </div>
 </div>
 
@@ -256,6 +256,19 @@ canvas{max-height:230px}
   const labels=["05-24", "05-25", "07-07", "07-08", "07-09"];
   const d=[11026.0, 4535.0, 14490.0, 1478.0, 11784.0];
   const c=[11026.0, 15561.0, 30051.0, 31529.0, 43313.0];
+  
+  // Dynamic width for scrollable global charts
+  const barCont = document.getElementById("globalBarContainer");
+  const lineCont = document.getElementById("globalLineContainer");
+  const scrollBox = document.getElementById("globalBarScroll");
+  if (barCont && lineCont && scrollBox) {
+      const reqW = labels.length * 30; // 30px per day
+      if (reqW > scrollBox.clientWidth) {
+          barCont.style.width = reqW + 'px';
+          lineCont.style.width = reqW + 'px';
+      }
+  }
+
   const opts={
       responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false}},
