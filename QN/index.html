@@ -65,9 +65,9 @@ canvas{max-height:230px}
   <h1>📊 QN — HMT.SH.26.004.PLA.QN (4 xã/phường)</h1>
   <div class="meta">
     <span>Deadline: <strong>2026-12-31</strong> (171 ngày)</span>
-    <span>Cập nhật: 13/07/2026 16:23</span>
+    <span>Cập nhật: 13/07/2026 16:41</span>
     <span class="tag-drive">🔵 Drive: 2026-07-12</span>
-    <span class="tag-na">Excel: chưa có</span>
+    <span class="tag-excel">🟠 Excel: 2026-07-09</span>
   </div>
 </header>
 
@@ -84,15 +84,15 @@ canvas{max-height:230px}
     </div>
     <div class="source-card excel">
       <div class="src-label excel">🟠 Excel NV — Số NV báo cáo</div>
-      <div class="src-value" style="color:#fb923c">0 <span style="font-size:16px;color:#fdba74">A4</span></div>
-      <div class="src-pct" style="color:#fdba74">0.0% mục tiêu</div>
-      <div class="src-sub" style="margin-top:6px">0 hồ sơ · 0 NV · ? → ?</div>
-      <div style="margin-top:10px"><div style="background:#1e293b;border-radius:6px;height:12px;overflow:hidden"><div style="background:#f97316;width:0.0%;height:100%;border-radius:6px"></div></div></div>
+      <div class="src-value" style="color:#fb923c">43,313 <span style="font-size:16px;color:#fdba74">A4</span></div>
+      <div class="src-pct" style="color:#fdba74">8.7% mục tiêu</div>
+      <div class="src-sub" style="margin-top:6px">275 hồ sơ · 5 NV · 2026-05-24 → 2026-07-09</div>
+      <div style="margin-top:10px"><div style="background:#1e293b;border-radius:6px;height:12px;overflow:hidden"><div style="background:#f97316;width:8.7%;height:100%;border-radius:6px"></div></div></div>
     </div>
   </div>
 
   <!-- Cross-check badge -->
-  
+  <div class="match-row"><strong>Đối chiếu:</strong> <span style="background:#422006;color:#fcd34d;border:1px solid #92400e;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">⚠️ Excel cao hơn +17,574 (68.3%)</span></div>
 
   <!-- Progress overall -->
   <div class="card">
@@ -101,12 +101,12 @@ canvas{max-height:230px}
     <div class="progress-labels">
       <span>🔵 Drive: 25,739 A4</span>
       <span>5.1%</span>
-      <span>🟠 Excel: 0 A4</span>
+      <span>🟠 Excel: 43,313 A4</span>
     </div>
   </div>
 
   <!-- Charts (từ Excel nếu có) -->
-  
+  <div class="grid-2"><div class="card"><h3>🟠 Sản lượng Excel 30 ngày (A4/ngày)</h3><canvas id="barChart"></canvas></div><div class="card"><h3>🟠 Tích lũy Excel (A4)</h3><canvas id="lineChart"></canvas></div></div>
 
   <!-- Tables -->
   <div class="grid-2">
@@ -134,15 +134,55 @@ canvas{max-height:230px}
     <!-- Excel table -->
     <div class="card">
       <h3>🟠 Chi tiết Excel — NV báo cáo</h3>
-      <p class="no-data">Chưa có data Excel. Chạy: <code>docscan_manager.py ingest-excel</code></p>
+      <table><thead><tr><th>NV</th><th style="text-align:right">HS</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th><th>Lần cuối</th><th style="text-align:center">vs Drive</th></tr></thead><tbody>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">[UBND Hải Lạng] Hường</td>
+          <td style="text-align:right">43</td>
+          <td style="text-align:right;color:#fb923c;font-weight:600">11,784.0</td>
+          <td style="text-align:right;color:#94a3b8">2.4%</td>
+          <td style="text-align:right;color:#94a3b8;font-size:12px">2026-07-09</td>
+          <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">[UBND Hải Lạng] Thiện</td>
+          <td style="text-align:right">36</td>
+          <td style="text-align:right;color:#fb923c;font-weight:600">15,968.0</td>
+          <td style="text-align:right;color:#94a3b8">3.2%</td>
+          <td style="text-align:right;color:#94a3b8;font-size:12px">2026-07-08</td>
+          <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Hùng</td>
+          <td style="text-align:right">45</td>
+          <td style="text-align:right;color:#fb923c;font-weight:600">7,196.0</td>
+          <td style="text-align:right;color:#94a3b8">1.4%</td>
+          <td style="text-align:right;color:#94a3b8;font-size:12px">2026-05-25</td>
+          <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Thiện</td>
+          <td style="text-align:right">126</td>
+          <td style="text-align:right;color:#fb923c;font-weight:600">5,937.0</td>
+          <td style="text-align:right;color:#94a3b8">1.2%</td>
+          <td style="text-align:right;color:#94a3b8;font-size:12px">2026-05-25</td>
+          <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Tùng</td>
+          <td style="text-align:right">25</td>
+          <td style="text-align:right;color:#fb923c;font-weight:600">2,428.0</td>
+          <td style="text-align:right;color:#94a3b8">0.5%</td>
+          <td style="text-align:right;color:#94a3b8;font-size:12px">2026-05-25</td>
+          <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
+        </tr></tbody></table>
     </div>
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 16:23
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 16:41
   </div>
 </div>
 
-
+<script>const labels=["05-24", "05-25", "07-07", "07-08", "07-09"];const d=[11026.0, 4535.0, 14490.0, 1478.0, 11784.0];const c=[11026.0, 15561.0, 30051.0, 31529.0, 43313.0];const opts={responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{backgroundColor:"#1e293b",titleColor:"#f1f5f9",bodyColor:"#94a3b8"}},scales:{x:{grid:{color:"#1e293b"},ticks:{color:"#64748b",font:{size:10}}},y:{grid:{color:"#1e293b"},ticks:{color:"#64748b"}}}};new Chart(document.getElementById("barChart"),{type:"bar",data:{labels,datasets:[{data:d,backgroundColor:"#f9731666",borderColor:"#f97316",borderWidth:1,borderRadius:3}]},options:opts});new Chart(document.getElementById("lineChart"),{type:"line",data:{labels,datasets:[{data:c,borderColor:"#f97316",backgroundColor:"#f9731622",fill:true,tension:.3,pointRadius:2}]},options:opts});</script>
 </body>
 </html>
