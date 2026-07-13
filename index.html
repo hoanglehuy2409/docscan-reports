@@ -2,121 +2,152 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Master Dashboard — DocScan</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DocScan — Master Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+:root{--bg:#0f172a;--surf:#1e293b;--border:#334155;--text:#f1f5f9;--muted:#94a3b8}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:32px 40px}
-.header{margin-bottom:28px}
-.header h1{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
-.header .sub{font-size:12px;color:#52525b}
-.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
-@media(max-width:900px){.stat-grid{grid-template-columns:repeat(3,1fr)}}
-.stat-card{background:#18181b;border:1px solid #27272a;border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
-.stat-card:hover{transform:translateY(-2px);border-color:#3f3f46}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
-.c-indigo::before{background:#6366f1}.c-green::before{background:#22c55e}
-.c-red::before{background:#ef4444}.c-purple::before{background:#8b5cf6}.c-amber::before{background:#f59e0b}
-.stat-icon{font-size:20px;margin-bottom:8px}
-.stat-count{font-size:30px;font-weight:700;color:#fff;line-height:1;margin-bottom:3px}
-.stat-label{font-size:11px;color:#71717a;font-weight:500}
-.tbl-card{background:#18181b;border:1px solid #27272a;border-radius:16px;padding:24px}
-.tbl-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.cnt{background:#27272a;color:#a1a1aa;padding:2px 8px;border-radius:8px;font-size:11px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{text-align:left;padding:10px 14px;color:#52525b;font-weight:500;border-bottom:1px solid #27272a;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
-td{padding:13px 14px;border-bottom:1px solid #1a1a1e;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#1f1f23}
-.proj-name{display:block;font-size:13px;font-weight:600;color:#e4e4e7}
-.proj-id{display:block;font-size:10px;color:#52525b;font-family:Consolas,monospace;margin-top:2px}
-.bar-track{background:#27272a;border-radius:5px;height:7px;width:110px;overflow:hidden}
-.bar-fill{height:100%;border-radius:5px}
-.pct-val{font-size:12px;font-weight:700;min-width:36px}
-.num{color:#a1a1aa;font-variant-numeric:tabular-nums}
-.dl-crit{color:#f87171;font-weight:700;font-size:11px}
-.dl-warn{color:#fb923c;font-weight:600;font-size:11px}
-.dl-amber{color:#fbbf24;font-size:11px}
-.dl-ok{color:#4ade80;font-size:11px}
-.dl-na{color:#3f3f46}
-.dash-link{display:inline-flex;align-items:center;padding:5px 12px;background:#1e1e24;border:1px solid #3f3f46;border-radius:8px;color:#a78bfa;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap;transition:all .15s}
-.dash-link:hover{background:#6366f1;border-color:#6366f1;color:#fff}
-.dash-na{color:#3f3f46;font-size:11px}
-.footer{text-align:center;color:#27272a;font-size:11px;margin-top:24px;padding-top:18px;border-top:1px solid #1a1a1e}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
+header{background:linear-gradient(135deg,#1e3a5f,#1e293b);padding:24px 40px;border-bottom:1px solid var(--border)}
+header h1{font-size:24px;font-weight:700;color:#fff}
+header .sub{color:var(--muted);font-size:13px;margin-top:4px}
+.container{max-width:1200px;margin:0 auto;padding:32px 40px}
+
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.kpi{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px}
+.kpi .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+.kpi .val{font-size:28px;font-weight:700;margin:6px 0 2px}
+.kpi .sub{font-size:12px;color:var(--muted)}
+
+.legend{display:flex;gap:16px;margin-bottom:16px;font-size:12px;align-items:center}
+.tag-drive{background:#172554;color:#93c5fd;border:1px solid #3b82f680;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-excel{background:#431407;color:#fdba74;border:1px solid #f9731680;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.tag-na{background:#1e293b;color:#64748b;border:1px solid #33415580;padding:3px 10px;border-radius:12px;font-size:11px}
+
+.card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+.card h2{font-size:16px;font-weight:600;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+td{padding:14px 12px;border-bottom:1px solid #1e293b;vertical-align:middle}
+tr:hover td{background:#1e293b66}
+
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:24px}
+.proj-card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:20px}
+.proj-id{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.proj-name{font-size:15px;font-weight:600;margin:6px 0 10px;color:#e2e8f0}
+.proj-sources{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pbar{background:#0f172a;border-radius:4px;height:8px;overflow:hidden;margin-bottom:6px}
+.proj-pct{font-size:12px;color:var(--muted);margin-bottom:12px}
+.proj-link{display:inline-block;background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:7px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500}
+.proj-link:hover{background:#1e40af}
+
+.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:24px}
+@media(max-width:768px){.kpi-row{grid-template-columns:1fr 1fr}.container{padding:20px}}
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>🗂️ Master Dashboard — DocScan</h1>
-  <div class="sub">Tổng hợp tất cả dự án · Cập nhật: 10/07/2026 17:05</div>
-</div>
+<header>
+  <h1>📊 DocScan — Quản lý Số hóa Tài liệu</h1>
+  <div class="sub">Tổng hợp tất cả dự án · Cập nhật: 13/07/2026 16:23</div>
+</header>
+<div class="container">
 
-<div class="stat-grid">
-  <div class="stat-card c-indigo"><div class="stat-icon">🗂️</div>
-    <div class="stat-count">2</div><div class="stat-label">Tổng dự án</div></div>
-  <div class="stat-card c-green"><div class="stat-icon">✅</div>
-    <div class="stat-count">338,265</div><div class="stat-label">File hợp lệ</div></div>
-  <div class="stat-card c-red"><div class="stat-icon">❌</div>
-    <div class="stat-count">336,481</div><div class="stat-label">File lỗi</div></div>
-  <div class="stat-card c-purple"><div class="stat-icon">📄</div>
-    <div class="stat-count">338,265.0</div><div class="stat-label">Tổng Quy đổi A4</div></div>
-  <div class="stat-card c-amber"><div class="stat-icon">🔴</div>
-    <div class="stat-count">0</div><div class="stat-label">Dự án cần chú ý</div></div>
-</div>
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="lbl">Tổng dự án</div>
+      <div class="val">2</div>
+      <div class="sub">đang theo dõi</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">🔵 Drive (tổng)</div>
+      <div class="val" style="color:#60a5fa">25,739</div>
+      <div class="sub">A4 đã đếm từ PDF</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">🟠 Excel NV (tổng)</div>
+      <div class="val" style="color:#fb923c">364,664</div>
+      <div class="sub">A4 NV báo cáo</div>
+    </div>
+    <div class="kpi">
+      <div class="lbl">Mục tiêu tổng</div>
+      <div class="val" style="color:#a78bfa">850,000</div>
+      <div class="sub">A4 cần hoàn thành</div>
+    </div>
+  </div>
 
-<div class="tbl-card">
-  <div class="tbl-title">📋 Chi tiết từng dự án <span class="cnt">2</span></div>
-  <table>
-    <thead>
-      <tr>
-        <th>Tên dự án</th><th>Tiến độ</th><th>QĐ A4 (đã / mục tiêu)</th>
-        <th>Deadline (còn lại)</th><th>File lỗi</th><th>File OK</th><th>Dashboard</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr style="">
-        <td>
-          <span class="proj-name">Du an VKS - STRESS TEST</span>
-          <span class="proj-id">VKS_STRESS</span>
-        </td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="bar-track">
-              <div class="bar-fill" style="width:38.8%;background:#f59e0b"></div>
+  <div class="legend">
+    <strong style="color:var(--muted)">Chú thích:</strong>
+    <span class="tag-drive">🔵 Drive = fitz đếm từ PDF thực tế</span>
+    <span class="tag-excel">🟠 Excel = NV tự báo cáo</span>
+    <span class="tag-na">— = chưa có data</span>
+  </div>
+
+  <div class="card">
+    <h2>📋 Danh sách dự án</h2>
+    <table>
+      <thead><tr>
+        <th>Dự án</th><th>Số liệu</th><th>Deadline</th><th>Dashboard</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:#e2e8f0">QN — HMT.SH.26.004.PLA.QN (4 xã/phường)</div>
+            <div style="font-size:11px;color:#64748b">QN</div>
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px"><span class="tag-drive">🔵 25,739</span>&nbsp;<span class="tag-na">Excel: —</span></div>
+            <div style="background:#0f172a;border-radius:4px;height:6px;overflow:hidden;width:160px">
+              <div style="background:#3b82f6;width:5.1%;height:100%"></div>
             </div>
-            <span class="pct-val" style="color:#f59e0b">38.8%</span>
-          </div>
-        </td>
-        <td class="num">1,942.0 / 5,000</td>
-        <td><span class="dl-ok">82 ngày</span></td>
-        <td style="color:#f87171;font-weight:600">158</td>
-        <td style="color:#71717a;font-size:11px">1,942</td>
-        <td><a href="file:///G:/My%20Drive/DocScan/DEMO_VKS_2025_LARGE/dashboard.html" class="dash-link" target="_blank">📊 Xem →</a></td>
-      </tr>
-      <tr style="">
-        <td>
-          <span class="proj-name">HMT.SH.26.004.PLA.QN</span>
-          <span class="proj-id">HMT_REAL</span>
-        </td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="bar-track">
-              <div class="bar-fill" style="width:100%;background:#22c55e"></div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px">5.1% / 500,000 A4</div>
+          </td>
+          <td style="color:#94a3b8;font-size:13px">2026-12-31</td>
+          <td>
+            <a href="./QN/" style="background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:500">Xem →</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div style="font-weight:600;color:#e2e8f0">VKS — Viện Kiểm Sát Nhân Dân</div>
+            <div style="font-size:11px;color:#64748b">VKS</div>
+          </td>
+          <td>
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px"><span class="tag-na">Drive: —</span>&nbsp;<span class="tag-excel">🟠 364,664</span></div>
+            <div style="background:#0f172a;border-radius:4px;height:6px;overflow:hidden;width:160px">
+              <div style="background:#22c55e;width:100.0%;height:100%"></div>
             </div>
-            <span class="pct-val" style="color:#22c55e">672.6%</span>
-          </div>
-        </td>
-        <td class="num">336,323.0 / 50,000</td>
-        <td><span class="dl-ok">173 ngày</span></td>
-        <td style="color:#f87171;font-weight:600">336,323</td>
-        <td style="color:#71717a;font-size:11px">336,323</td>
-        <td><a href="file:///C:/Users/I%27s%20Me/Tools/DocScanManager/HMT_REAL/dashboard.html" class="dash-link" target="_blank">📊 Xem →</a></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <div style="font-size:11px;color:#64748b;margin-top:2px">104.2% / 350,000 A4</div>
+          </td>
+          <td style="color:#94a3b8;font-size:13px">2026-06-30</td>
+          <td>
+            <a href="./VKS/" style="background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:500">Xem →</a>
+          </td>
+        </tr></tbody>
+    </table>
+  </div>
 
-<div class="footer">DocScan Master Dashboard · Tự động tạo bởi scan_reporter.py · 10/07/2026 17:05</div>
+  <div class="proj-grid">
+        <div class="proj-card">
+          <div class="proj-id">QN</div>
+          <div class="proj-name">QN — HMT.SH.26.004.PLA.QN (4 xã/phường)</div>
+          <div class="proj-sources"><span class="tag-drive">🔵 25,739</span> <span class="tag-na">Excel: —</span></div>
+          <div class="pbar"><div style="background:#3b82f6;width:5.1%;height:100%;border-radius:4px"></div></div>
+          <div class="proj-pct">5.1% — 25,739 / 500,000 A4</div>
+          <a class="proj-link" href="./QN/">Mở Dashboard →</a>
+        </div>
+        <div class="proj-card">
+          <div class="proj-id">VKS</div>
+          <div class="proj-name">VKS — Viện Kiểm Sát Nhân Dân</div>
+          <div class="proj-sources"><span class="tag-na">Drive: —</span> <span class="tag-excel">🟠 364,664</span></div>
+          <div class="pbar"><div style="background:#22c55e;width:100.0%;height:100%;border-radius:4px"></div></div>
+          <div class="proj-pct">104.2% — 364,664 / 350,000 A4</div>
+          <a class="proj-link" href="./VKS/">Mở Dashboard →</a>
+        </div></div>
+
+  <div class="updated">
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; 13/07/2026 16:23
+  </div>
+</div>
 </body>
 </html>
