@@ -47,6 +47,15 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
 td{padding:9px 10px;border-bottom:1px solid #1e293b}
 tr:hover td{background:#1e293b66}
+.clickable-row{cursor:pointer;transition:background 0.2s}
+.clickable-row:hover td{background:#334155!important}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;justify-content:center;align-items:center}
+.modal-box{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:24px;width:90%;max-width:600px;box-shadow:0 10px 25px rgba(0,0,0,0.5)}
+.modal-header{display:flex;justify-content:space-between;margin-bottom:16px;align-items:flex-start}
+.modal-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
+.modal-close:hover{color:#fff}
 
 .tag-drive{background:#172554;color:#93c5fd;border:1px solid #3b82f680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
 .tag-excel{background:#431407;color:#fdba74;border:1px solid #f9731680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
@@ -66,7 +75,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-06-30</strong> (0 ngày)</span>
     <span style="background:#052e16;color:#86efac;border:1px solid #166534;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">✅ Hoàn thành</span>
-    <span>Cập nhật: 13/07/2026 17:44</span>
+    <span>Cập nhật: 13/07/2026 18:18</span>
     <span class="tag-na">Drive: chưa scan</span>
     <span class="tag-excel">🟠 Excel: 2025-12-19</span>
   </div>
@@ -123,7 +132,7 @@ canvas{max-height:230px}
     <div class="card">
       <h3>🟠 Chi tiết Excel — NV báo cáo</h3>
       <table><thead><tr><th>NV</th><th style="text-align:right">HS</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th><th>Lần cuối</th><th style="text-align:center">vs Drive</th></tr></thead><tbody>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Diệu Linh')">
           <td style="font-weight:500;color:#e2e8f0">Diệu Linh</td>
           <td style="text-align:right">219</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">31,378.0</td>
@@ -131,7 +140,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Hoa')">
           <td style="font-weight:500;color:#e2e8f0">Hoa</td>
           <td style="text-align:right">258</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">58,925.0</td>
@@ -139,7 +148,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Hoàng')">
           <td style="font-weight:500;color:#e2e8f0">Hoàng</td>
           <td style="text-align:right">19</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">472.0</td>
@@ -147,7 +156,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-11-28</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Huệ')">
           <td style="font-weight:500;color:#e2e8f0">Huệ</td>
           <td style="text-align:right">155</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">28,221.0</td>
@@ -155,7 +164,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Hưng')">
           <td style="font-weight:500;color:#e2e8f0">Hưng</td>
           <td style="text-align:right">288</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">38,731.0</td>
@@ -163,7 +172,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Hường')">
           <td style="font-weight:500;color:#e2e8f0">Hường</td>
           <td style="text-align:right">13</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">18,598.0</td>
@@ -171,7 +180,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-18</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Hồng')">
           <td style="font-weight:500;color:#e2e8f0">Hồng</td>
           <td style="text-align:right">276</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">55,958.0</td>
@@ -179,7 +188,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Như')">
           <td style="font-weight:500;color:#e2e8f0">Như</td>
           <td style="text-align:right">177</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">22,788.0</td>
@@ -187,7 +196,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Quỳnh')">
           <td style="font-weight:500;color:#e2e8f0">Quỳnh</td>
           <td style="text-align:right">66</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">14,866.0</td>
@@ -195,7 +204,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-18</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Thùy Linh')">
           <td style="font-weight:500;color:#e2e8f0">Thùy Linh</td>
           <td style="text-align:right">277</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">58,504.0</td>
@@ -203,7 +212,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Trần Khánh Linh')">
           <td style="font-weight:500;color:#e2e8f0">Trần Khánh Linh</td>
           <td style="text-align:right">63</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">26,176.0</td>
@@ -211,7 +220,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-18</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('Tuyết Linh')">
           <td style="font-weight:500;color:#e2e8f0">Tuyết Linh</td>
           <td style="text-align:right">47</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">10,047.0</td>
@@ -223,10 +232,111 @@ canvas{max-height:230px}
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 17:44
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:18
   </div>
 </div>
 
-<script>const labels=["02-12", "03-12", "04-12", "05-12", "08-12", "09-12", "10-12", "11-12", "11-25", "11-27", "11-28", "12-01", "12-02", "12-03", "12-04", "12-05", "12-06", "12-07", "12-08", "12-09", "12-10", "12-11", "12-12", "12-13", "12-14", "12-15", "12-16", "12-17", "12-18", "12-19"];const d=[3383.0, 1050.0, 1968.0, 846.0, 769.0, 966.0, 1168.0, 898.0, 3893.0, 405.0, 67.0, 2633.0, 10148.0, 11505.0, 17871.0, 16802.0, 9846.0, 5103.0, 12663.0, 19838.0, 25741.0, 22953.0, 7649.0, 16074.0, 17141.0, 12976.0, 18750.0, 44498.0, 52833.0, 23128.0];const c=[3383.0, 4433.0, 6401.0, 7247.0, 8016.0, 8982.0, 10150.0, 11048.0, 14941.0, 15346.0, 15413.0, 18046.0, 28194.0, 39699.0, 57570.0, 74372.0, 84218.0, 89321.0, 101984.0, 121822.0, 147563.0, 170516.0, 178165.0, 194239.0, 211380.0, 224356.0, 243106.0, 287604.0, 340437.0, 363565.0];const opts={responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{backgroundColor:"#1e293b",titleColor:"#f1f5f9",bodyColor:"#94a3b8"}},scales:{x:{grid:{color:"#1e293b"},ticks:{color:"#64748b",font:{size:10}}},y:{grid:{color:"#1e293b"},ticks:{color:"#64748b"}}}};new Chart(document.getElementById("barChart"),{type:"bar",data:{labels,datasets:[{data:d,backgroundColor:"#f9731666",borderColor:"#f97316",borderWidth:1,borderRadius:3}]},options:opts});new Chart(document.getElementById("lineChart"),{type:"line",data:{labels,datasets:[{data:c,borderColor:"#f97316",backgroundColor:"#f9731622",fill:true,tension:.3,pointRadius:2}]},options:opts});</script>
+<!-- Modal -->
+<div id="nvModal" class="modal-overlay" onclick="if(event.target===this) closeNVModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2 id="modalNVName" style="margin-bottom:4px;color:#e2e8f0">Tên NV</h2>
+        <div id="modalNVSummary" style="color:var(--muted);font-size:13px"></div>
+      </div>
+      <button class="modal-close" onclick="closeNVModal()">&times;</button>
+    </div>
+    <div style="height:250px">
+      <canvas id="nvChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="nvDataJSON">
+{"Diệu Linh": {"total_qr_a4": 31378.0, "total_a3": 1160, "total_a4": 29058, "total_pages": 23368, "total_ho_so": 219, "per_day": {"2025-12-01": {"qr_a4": 559.0, "ho_so": 3, "a3": 104, "a4": 351}, "2025-12-02": {"qr_a4": 932.0, "ho_so": 3, "a3": 43, "a4": 846}, "2025-12-03": {"qr_a4": 1750.0, "ho_so": 5, "a3": 84, "a4": 1582}, "2025-12-04": {"qr_a4": 1471.0, "ho_so": 14, "a3": 122, "a4": 1227}, "2025-12-05": {"qr_a4": 1145.0, "ho_so": 8, "a3": 111, "a4": 923}, "2025-12-06": {"qr_a4": 1224.0, "ho_so": 15, "a3": 72, "a4": 1080}, "2025-12-08": {"qr_a4": 1557.0, "ho_so": 32, "a3": 44, "a4": 1469}, "2025-12-09": {"qr_a4": 1720.0, "ho_so": 22, "a3": 100, "a4": 1520}, "2025-12-10": {"qr_a4": 2578.0, "ho_so": 12, "a3": 230, "a4": 2118}, "2025-12-11": {"qr_a4": 1961.0, "ho_so": 21, "a3": 53, "a4": 1855}, "2025-12-12": {"qr_a4": 1617.0, "ho_so": 13, "a3": 87, "a4": 1443}, "2025-12-15": {"qr_a4": 2223.0, "ho_so": 10, "a3": 80, "a4": 2063}, "2025-12-16": {"qr_a4": 1980.0, "ho_so": 9, "a3": 30, "a4": 1920}, "2025-12-17": {"qr_a4": 4615.0, "ho_so": 20, "a3": 0, "a4": 4615}, "2025-12-18": {"qr_a4": 3121.0, "ho_so": 24, "a3": 0, "a4": 3121}, "2025-12-19": {"qr_a4": 2925.0, "ho_so": 8, "a3": 0, "a4": 2925}}, "first_date": "2025-12-01", "last_date": "2025-12-19"}, "Hoa": {"total_qr_a4": 58925.0, "total_a3": 1047, "total_a4": 56855, "total_pages": 44180, "total_ho_so": 258, "per_day": {"2025-12-02": {"qr_a4": 2545.0, "ho_so": 8, "a3": 46, "a4": 2453}, "2025-12-03": {"qr_a4": 824.0, "ho_so": 12, "a3": 12, "a4": 800}, "2025-12-04": {"qr_a4": 2473.0, "ho_so": 11, "a3": 11, "a4": 2455}, "2025-12-05": {"qr_a4": 3414.0, "ho_so": 24, "a3": 120, "a4": 3166}, "2025-12-06": {"qr_a4": 1061.0, "ho_so": 10, "a3": 1, "a4": 1059}, "2025-12-08": {"qr_a4": 847.0, "ho_so": 10, "a3": 0, "a4": 847}, "2025-12-09": {"qr_a4": 3878.0, "ho_so": 18, "a3": 181, "a4": 3516}, "2025-12-10": {"qr_a4": 5176.0, "ho_so": 40, "a3": 428, "a4": 4320}, "2025-12-11": {"qr_a4": 4062.0, "ho_so": 23, "a3": 74, "a4": 3914}, "2025-12-13": {"qr_a4": 4249.0, "ho_so": 12, "a3": 13, "a4": 4223}, "2025-12-14": {"qr_a4": 6155.0, "ho_so": 16, "a3": 45, "a4": 6065}, "2025-12-15": {"qr_a4": 1058.0, "ho_so": 4, "a3": 6, "a4": 1046}, "2025-12-16": {"qr_a4": 3531.0, "ho_so": 9, "a3": 14, "a4": 3503}, "2025-12-17": {"qr_a4": 7432.0, "ho_so": 22, "a3": 22, "a4": 7388}, "2025-12-18": {"qr_a4": 8074.0, "ho_so": 25, "a3": 74, "a4": 7954}, "2025-12-19": {"qr_a4": 4146.0, "ho_so": 14, "a3": 0, "a4": 4146}}, "first_date": "2025-12-02", "last_date": "2025-12-19"}, "Hồng": {"total_qr_a4": 55958.0, "total_a3": 0, "total_a4": 0, "total_pages": 42951, "total_ho_so": 276, "per_day": {"2025-12-03": {"qr_a4": 2300.0, "ho_so": 13, "a3": 0, "a4": 0}, "2025-12-04": {"qr_a4": 3304.0, "ho_so": 8, "a3": 0, "a4": 0}, "2025-12-05": {"qr_a4": 2368.0, "ho_so": 10, "a3": 0, "a4": 0}, "2025-12-06": {"qr_a4": 1717.0, "ho_so": 30, "a3": 0, "a4": 0}, "2025-12-07": {"qr_a4": 952.0, "ho_so": 19, "a3": 0, "a4": 0}, "2025-12-08": {"qr_a4": 3118.0, "ho_so": 11, "a3": 0, "a4": 0}, "2025-12-09": {"qr_a4": 4128.0, "ho_so": 17, "a3": 0, "a4": 0}, "2025-12-10": {"qr_a4": 3623.0, "ho_so": 30, "a3": 0, "a4": 0}, "2025-12-11": {"qr_a4": 4956.0, "ho_so": 26, "a3": 0, "a4": 0}, "2025-12-13": {"qr_a4": 4177.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-14": {"qr_a4": 5838.0, "ho_so": 16, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 1008.0, "ho_so": 9, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 2374.0, "ho_so": 20, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 5818.0, "ho_so": 16, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 6762.0, "ho_so": 25, "a3": 0, "a4": 0}, "2025-12-19": {"qr_a4": 3515.0, "ho_so": 12, "a3": 0, "a4": 0}}, "first_date": "2025-12-03", "last_date": "2025-12-19"}, "Hưng": {"total_qr_a4": 38731.0, "total_a3": 1343, "total_a4": 36045, "total_pages": 28768, "total_ho_so": 288, "per_day": {"2025-12-01": {"qr_a4": 776.0, "ho_so": 11, "a3": 72, "a4": 632}, "2025-12-02": {"qr_a4": 901.0, "ho_so": 10, "a3": 46, "a4": 809}, "2025-12-03": {"qr_a4": 2418.0, "ho_so": 8, "a3": 110, "a4": 2198}, "2025-12-04": {"qr_a4": 1739.0, "ho_so": 18, "a3": 41, "a4": 1657}, "2025-12-05": {"qr_a4": 1743.0, "ho_so": 50, "a3": 118, "a4": 1507}, "2025-12-06": {"qr_a4": 824.0, "ho_so": 20, "a3": 97, "a4": 630}, "2025-12-07": {"qr_a4": 1678.0, "ho_so": 36, "a3": 161, "a4": 1356}, "2025-12-09": {"qr_a4": 1398.0, "ho_so": 10, "a3": 140, "a4": 1118}, "2025-12-10": {"qr_a4": 3255.0, "ho_so": 11, "a3": 108, "a4": 3039}, "2025-12-11": {"qr_a4": 3002.0, "ho_so": 19, "a3": 141, "a4": 2720}, "2025-12-12": {"qr_a4": 3322.0, "ho_so": 14, "a3": 155, "a4": 3012}, "2025-12-14": {"qr_a4": 2961.0, "ho_so": 12, "a3": 119, "a4": 2723}, "2025-12-15": {"qr_a4": 816.0, "ho_so": 5, "a3": 30, "a4": 756}, "2025-12-16": {"qr_a4": 2151.0, "ho_so": 9, "a3": 0, "a4": 2151}, "2025-12-17": {"qr_a4": 4348.0, "ho_so": 15, "a3": 3, "a4": 4342}, "2025-12-18": {"qr_a4": 6269.0, "ho_so": 36, "a3": 2, "a4": 6265}, "2025-12-19": {"qr_a4": 1130.0, "ho_so": 4, "a3": 0, "a4": 1130}}, "first_date": "2025-12-01", "last_date": "2025-12-19"}, "Thùy Linh": {"total_qr_a4": 58504.0, "total_a3": 0, "total_a4": 0, "total_pages": 43353, "total_ho_so": 277, "per_day": {"2025-12-02": {"qr_a4": 1364.0, "ho_so": 5, "a3": 0, "a4": 0}, "2025-12-03": {"qr_a4": 2022.0, "ho_so": 15, "a3": 0, "a4": 0}, "2025-12-04": {"qr_a4": 4273.0, "ho_so": 15, "a3": 0, "a4": 0}, "2025-12-05": {"qr_a4": 2688.0, "ho_so": 22, "a3": 0, "a4": 0}, "2025-12-06": {"qr_a4": 853.0, "ho_so": 41, "a3": 0, "a4": 0}, "2025-12-07": {"qr_a4": 957.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-08": {"qr_a4": 3472.0, "ho_so": 16, "a3": 0, "a4": 0}, "2025-12-09": {"qr_a4": 4640.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-10": {"qr_a4": 7209.0, "ho_so": 31, "a3": 0, "a4": 0}, "2025-12-11": {"qr_a4": 3312.0, "ho_so": 10, "a3": 0, "a4": 0}, "2025-12-13": {"qr_a4": 7648.0, "ho_so": 34, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 1343.0, "ho_so": 4, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 2452.0, "ho_so": 12, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 5677.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 7100.0, "ho_so": 29, "a3": 0, "a4": 0}, "2025-12-19": {"qr_a4": 3494.0, "ho_so": 12, "a3": 0, "a4": 0}}, "first_date": "2025-12-02", "last_date": "2025-12-19"}, "Như": {"total_qr_a4": 22788.0, "total_a3": 0, "total_a4": 0, "total_pages": 16312, "total_ho_so": 177, "per_day": {"2025-12-01": {"qr_a4": 349.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-02-12": {"qr_a4": 1884.0, "ho_so": 16, "a3": 0, "a4": 0}, "2025-12-03": {"qr_a4": 1280.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-04": {"qr_a4": 1463.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-05": {"qr_a4": 1740.0, "ho_so": 33, "a3": 0, "a4": 0}, "2025-12-06": {"qr_a4": 1688.0, "ho_so": 51, "a3": 0, "a4": 0}, "2025-12-07": {"qr_a4": 22.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-08": {"qr_a4": 1637.0, "ho_so": 5, "a3": 0, "a4": 0}, "2025-12-09": {"qr_a4": 1161.0, "ho_so": 5, "a3": 0, "a4": 0}, "2025-12-10": {"qr_a4": 503.0, "ho_so": 2, "a3": 0, "a4": 0}, "2025-12-11": {"qr_a4": 2163.0, "ho_so": 22, "a3": 0, "a4": 0}, "2025-12-14": {"qr_a4": 386.0, "ho_so": 4, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 2451.0, "ho_so": 8, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 3114.0, "ho_so": 10, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 1006.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-19": {"qr_a4": 1941.0, "ho_so": 10, "a3": 0, "a4": 0}}, "first_date": "2025-02-12", "last_date": "2025-12-19"}, "Huệ": {"total_qr_a4": 28221.0, "total_a3": 0, "total_a4": 0, "total_pages": 21431, "total_ho_so": 155, "per_day": {"2025-11-25": {"qr_a4": 3893.0, "ho_so": 22, "a3": 0, "a4": 0}, "2025-12-02": {"qr_a4": 675.0, "ho_so": 4, "a3": 0, "a4": 0}, "2025-12-03": {"qr_a4": 911.0, "ho_so": 6, "a3": 0, "a4": 0}, "2025-12-04": {"qr_a4": 1417.0, "ho_so": 6, "a3": 0, "a4": 0}, "2025-12-05": {"qr_a4": 1384.0, "ho_so": 13, "a3": 0, "a4": 0}, "2025-12-08": {"qr_a4": 2032.0, "ho_so": 20, "a3": 0, "a4": 0}, "2025-12-09": {"qr_a4": 1580.0, "ho_so": 6, "a3": 0, "a4": 0}, "2025-12-10": {"qr_a4": 1695.0, "ho_so": 7, "a3": 0, "a4": 0}, "2025-12-11": {"qr_a4": 2498.0, "ho_so": 9, "a3": 0, "a4": 0}, "2025-12-12": {"qr_a4": 1642.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 998.0, "ho_so": 7, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 2578.0, "ho_so": 13, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 3895.0, "ho_so": 19, "a3": 0, "a4": 0}, "2025-12-19": {"qr_a4": 3023.0, "ho_so": 9, "a3": 0, "a4": 0}}, "first_date": "2025-11-25", "last_date": "2025-12-19"}, "Trần Khánh Linh": {"total_qr_a4": 26176.0, "total_a3": 0, "total_a4": 0, "total_pages": 12446, "total_ho_so": 63, "per_day": {"2025-12-01": {"qr_a4": 949.0, "ho_so": 5, "a3": 0, "a4": 0}, "2025-12-02": {"qr_a4": 3731.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-03": {"qr_a4": 0.0, "ho_so": 4, "a3": 0, "a4": 0}, "2025-12-04": {"qr_a4": 1731.0, "ho_so": 2, "a3": 0, "a4": 0}, "2025-12-05": {"qr_a4": 2320.0, "ho_so": 6, "a3": 0, "a4": 0}, "2025-12-06": {"qr_a4": 2479.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-07": {"qr_a4": 1494.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-09": {"qr_a4": 1333.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-10": {"qr_a4": 1702.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-11": {"qr_a4": 999.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 1961.0, "ho_so": 7, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 3944.0, "ho_so": 9, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 3533.0, "ho_so": 11, "a3": 0, "a4": 0}}, "first_date": "2025-12-01", "last_date": "2025-12-18"}, "Tuyết Linh": {"total_qr_a4": 10047.0, "total_a3": 0, "total_a4": 0, "total_pages": 7744, "total_ho_so": 47, "per_day": {"2025-12-14": {"qr_a4": 1233.0, "ho_so": 4, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 867.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 855.0, "ho_so": 5, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 1675.0, "ho_so": 14, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 2463.0, "ho_so": 9, "a3": 0, "a4": 0}, "2025-12-19": {"qr_a4": 2954.0, "ho_so": 12, "a3": 0, "a4": 0}}, "first_date": "2025-12-14", "last_date": "2025-12-19"}, "Quỳnh": {"total_qr_a4": 14866.0, "total_a3": 0, "total_a4": 0, "total_pages": 3331, "total_ho_so": 66, "per_day": {"2025-12-14": {"qr_a4": 568.0, "ho_so": 1, "a3": 0, "a4": 0}, "unknown": {"qr_a4": 1073.0, "ho_so": 3, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 2952.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-16": {"qr_a4": 995.0, "ho_so": 6, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 3009.0, "ho_so": 19, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 6269.0, "ho_so": 36, "a3": 0, "a4": 0}}, "first_date": "2025-12-14", "last_date": "2025-12-18"}, "Hường": {"total_qr_a4": 18598.0, "total_a3": 0, "total_a4": 0, "total_pages": 0, "total_ho_so": 13, "per_day": {"2025-01-12": {"qr_a4": 26.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-02-12": {"qr_a4": 1499.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-03-12": {"qr_a4": 1050.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-04-12": {"qr_a4": 1968.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-05-12": {"qr_a4": 846.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-08-12": {"qr_a4": 769.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-09-12": {"qr_a4": 966.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-10-12": {"qr_a4": 1168.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-11-12": {"qr_a4": 898.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-12": {"qr_a4": 1068.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-15": {"qr_a4": 1711.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-17": {"qr_a4": 2288.0, "ho_so": 1, "a3": 0, "a4": 0}, "2025-12-18": {"qr_a4": 4341.0, "ho_so": 1, "a3": 0, "a4": 0}}, "first_date": "2025-01-12", "last_date": "2025-12-18"}, "Hoàng": {"total_qr_a4": 472.0, "total_a3": 0, "total_a4": 0, "total_pages": 319, "total_ho_so": 19, "per_day": {"2025-11-27": {"qr_a4": 405.0, "ho_so": 17, "a3": 0, "a4": 0}, "2025-11-28": {"qr_a4": 67.0, "ho_so": 2, "a3": 0, "a4": 0}}, "first_date": "2025-11-27", "last_date": "2025-11-28"}}
+</script>
+
+<script>
+  // ── Global Charts ─────────────────────────────────────────────────────────
+  
+  const labels=["02-12", "03-12", "04-12", "05-12", "08-12", "09-12", "10-12", "11-12", "11-25", "11-27", "11-28", "12-01", "12-02", "12-03", "12-04", "12-05", "12-06", "12-07", "12-08", "12-09", "12-10", "12-11", "12-12", "12-13", "12-14", "12-15", "12-16", "12-17", "12-18", "12-19"];
+  const d=[3383.0, 1050.0, 1968.0, 846.0, 769.0, 966.0, 1168.0, 898.0, 3893.0, 405.0, 67.0, 2633.0, 10148.0, 11505.0, 17871.0, 16802.0, 9846.0, 5103.0, 12663.0, 19838.0, 25741.0, 22953.0, 7649.0, 16074.0, 17141.0, 12976.0, 18750.0, 44498.0, 52833.0, 23128.0];
+  const c=[3383.0, 4433.0, 6401.0, 7247.0, 8016.0, 8982.0, 10150.0, 11048.0, 14941.0, 15346.0, 15413.0, 18046.0, 28194.0, 39699.0, 57570.0, 74372.0, 84218.0, 89321.0, 101984.0, 121822.0, 147563.0, 170516.0, 178165.0, 194239.0, 211380.0, 224356.0, 243106.0, 287604.0, 340437.0, 363565.0];
+  const opts={
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+          x:{grid:{color:"#1e293b"},ticks:{color:"#64748b",font:{size:10}}},
+          y:{grid:{color:"#1e293b"},ticks:{color:"#64748b"}}
+      }
+  };
+  new Chart(document.getElementById("barChart"),{type:"bar",data:{labels,datasets:[{data:d,backgroundColor:"#f9731666",borderColor:"#f97316",borderWidth:1,borderRadius:3}]},options:opts});
+  new Chart(document.getElementById("lineChart"),{type:"line",data:{labels,datasets:[{data:c,borderColor:"#f97316",backgroundColor:"#f9731622",fill:true,tension:.3,pointRadius:2}]},options:opts});
+  
+
+  // ── Modal NV Logic ─────────────────────────────────────────────────────────
+  let nvChartInstance = null;
+  const rawData = document.getElementById('nvDataJSON').textContent;
+  const nvData = JSON.parse(rawData || "{}");
+  const targetPerNV = 0;
+
+  function openNVModal(nvName) {
+      const data = nvData[nvName];
+      if (!data) return;
+
+      document.getElementById('modalNVName').textContent = nvName;
+      document.getElementById('modalNVSummary').textContent = `Tổng: ${data.total_qr_a4.toLocaleString()} A4 · ${data.total_ho_so.toLocaleString()} Hồ sơ`;
+
+      const days = Object.keys(data.per_day).filter(d => d !== 'unknown').sort();
+      // Lấy 14 ngày gần nhất có data
+      const recentDays = days.slice(-14);
+      const _labels = recentDays.map(d => d.substring(5)); // MM-DD
+      const values = recentDays.map(d => data.per_day[d].qr_a4);
+
+      const ctx = document.getElementById('nvChart').getContext('2d');
+      if (nvChartInstance) nvChartInstance.destroy();
+
+      nvChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: _labels,
+              datasets: [
+                  {
+                      label: 'A4 Thực tế',
+                      data: values,
+                      backgroundColor: '#60a5fa',
+                      borderRadius: 4,
+                      order: 2
+                  },
+                  {
+                      label: 'Mục tiêu ngày',
+                      data: Array(_labels.length).fill(targetPerNV),
+                      type: 'line',
+                      borderColor: '#f43f5e',
+                      borderWidth: 2,
+                      borderDash: [5, 5],
+                      pointRadius: 0,
+                      fill: false,
+                      order: 1
+                  }
+              ]
+          },
+          options: {
+              responsive: true, maintainAspectRatio: false,
+              plugins: { legend: { labels: { color: '#e2e8f0' } } },
+              scales: {
+                  y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                  x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+              }
+          }
+      });
+
+      document.getElementById('nvModal').style.display = 'flex';
+  }
+
+  function closeNVModal() {
+      document.getElementById('nvModal').style.display = 'none';
+  }
+</script>
 </body>
 </html>
