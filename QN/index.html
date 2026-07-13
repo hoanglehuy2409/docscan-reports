@@ -47,6 +47,15 @@ table{width:100%;border-collapse:collapse;font-size:13px}
 th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
 td{padding:9px 10px;border-bottom:1px solid #1e293b}
 tr:hover td{background:#1e293b66}
+.clickable-row{cursor:pointer;transition:background 0.2s}
+.clickable-row:hover td{background:#334155!important}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;justify-content:center;align-items:center}
+.modal-box{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:24px;width:90%;max-width:600px;box-shadow:0 10px 25px rgba(0,0,0,0.5)}
+.modal-header{display:flex;justify-content:space-between;margin-bottom:16px;align-items:flex-start}
+.modal-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
+.modal-close:hover{color:#fff}
 
 .tag-drive{background:#172554;color:#93c5fd;border:1px solid #3b82f680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
 .tag-excel{background:#431407;color:#fdba74;border:1px solid #f9731680;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
@@ -66,7 +75,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-12-31</strong> (171 ngày)</span>
     
-    <span>Cập nhật: 13/07/2026 17:44</span>
+    <span>Cập nhật: 13/07/2026 18:17</span>
     <span class="tag-drive">🔵 Drive: 2026-07-12</span>
     <span class="tag-excel">🟠 Excel: 2026-07-09</span>
   </div>
@@ -171,7 +180,7 @@ canvas{max-height:230px}
     <div class="card">
       <h3>🟠 Chi tiết Excel — NV báo cáo</h3>
       <table><thead><tr><th>NV</th><th style="text-align:right">HS</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th><th>Lần cuối</th><th style="text-align:center">vs Drive</th></tr></thead><tbody>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('[UBND Hải Lạng] Hường')">
           <td style="font-weight:500;color:#e2e8f0">[UBND Hải Lạng] Hường</td>
           <td style="text-align:right">43</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">11,784.0</td>
@@ -179,7 +188,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2026-07-09</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('[UBND Hải Lạng] Thiện')">
           <td style="font-weight:500;color:#e2e8f0">[UBND Hải Lạng] Thiện</td>
           <td style="text-align:right">36</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">15,968.0</td>
@@ -187,7 +196,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2026-07-08</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('[UBND Đầm Hà] Hùng')">
           <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Hùng</td>
           <td style="text-align:right">45</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">7,196.0</td>
@@ -195,7 +204,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2026-05-25</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('[UBND Đầm Hà] Thiện')">
           <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Thiện</td>
           <td style="text-align:right">126</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">5,937.0</td>
@@ -203,7 +212,7 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8;font-size:12px">2026-05-25</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
         </tr>
-        <tr>
+        <tr class="clickable-row" onclick="openNVModal('[UBND Đầm Hà] Tùng')">
           <td style="font-weight:500;color:#e2e8f0">[UBND Đầm Hà] Tùng</td>
           <td style="text-align:right">25</td>
           <td style="text-align:right;color:#fb923c;font-weight:600">2,428.0</td>
@@ -215,10 +224,111 @@ canvas{max-height:230px}
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 17:44
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 18:17
   </div>
 </div>
 
-<script>const labels=["05-24", "05-25", "07-07", "07-08", "07-09"];const d=[11026.0, 4535.0, 14490.0, 1478.0, 11784.0];const c=[11026.0, 15561.0, 30051.0, 31529.0, 43313.0];const opts={responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{backgroundColor:"#1e293b",titleColor:"#f1f5f9",bodyColor:"#94a3b8"}},scales:{x:{grid:{color:"#1e293b"},ticks:{color:"#64748b",font:{size:10}}},y:{grid:{color:"#1e293b"},ticks:{color:"#64748b"}}}};new Chart(document.getElementById("barChart"),{type:"bar",data:{labels,datasets:[{data:d,backgroundColor:"#f9731666",borderColor:"#f97316",borderWidth:1,borderRadius:3}]},options:opts});new Chart(document.getElementById("lineChart"),{type:"line",data:{labels,datasets:[{data:c,borderColor:"#f97316",backgroundColor:"#f9731622",fill:true,tension:.3,pointRadius:2}]},options:opts});</script>
+<!-- Modal -->
+<div id="nvModal" class="modal-overlay" onclick="if(event.target===this) closeNVModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <h2 id="modalNVName" style="margin-bottom:4px;color:#e2e8f0">Tên NV</h2>
+        <div id="modalNVSummary" style="color:var(--muted);font-size:13px"></div>
+      </div>
+      <button class="modal-close" onclick="closeNVModal()">&times;</button>
+    </div>
+    <div style="height:250px">
+      <canvas id="nvChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="nvDataJSON">
+{"[UBND Đầm Hà] Thiện": {"total_qr_a4": 5937.0, "total_a3": 222, "total_a4": 801, "total_pages": 0, "total_ho_so": 126, "per_day": {"2026-05-24": {"qr_a4": 4401.0, "ho_so": 99, "a3": 222, "a4": 161}, "2026-05-25": {"qr_a4": 1536.0, "ho_so": 27, "a3": 0, "a4": 640}}, "first_date": "2026-05-24", "last_date": "2026-05-25"}, "[UBND Đầm Hà] Tùng": {"total_qr_a4": 2428.0, "total_a3": 31, "total_a4": 1382, "total_pages": 0, "total_ho_so": 25, "per_day": {"2026-05-24": {"qr_a4": 1189.0, "ho_so": 3, "a3": 17, "a4": 1155}, "2026-05-25": {"qr_a4": 1239.0, "ho_so": 22, "a3": 14, "a4": 227}}, "first_date": "2026-05-24", "last_date": "2026-05-25"}, "[UBND Đầm Hà] Hùng": {"total_qr_a4": 7196.0, "total_a3": 373, "total_a4": 6450, "total_pages": 0, "total_ho_so": 45, "per_day": {"2026-05-24": {"qr_a4": 5436.0, "ho_so": 36, "a3": 308, "a4": 4820}, "2026-05-25": {"qr_a4": 1760.0, "ho_so": 9, "a3": 65, "a4": 1630}}, "first_date": "2026-05-24", "last_date": "2026-05-25"}, "[UBND Hải Lạng] Thiện": {"total_qr_a4": 15968.0, "total_a3": 189, "total_a4": 15590, "total_pages": 0, "total_ho_so": 36, "per_day": {"2026-07-07": {"qr_a4": 14490.0, "ho_so": 29, "a3": 0, "a4": 14490}, "2026-07-08": {"qr_a4": 1478.0, "ho_so": 7, "a3": 189, "a4": 1100}}, "first_date": "2026-07-07", "last_date": "2026-07-08"}, "[UBND Hải Lạng] Hường": {"total_qr_a4": 11784.0, "total_a3": 688, "total_a4": 10408, "total_pages": 0, "total_ho_so": 43, "per_day": {"2026-07-09": {"qr_a4": 11784.0, "ho_so": 43, "a3": 688, "a4": 10408}}, "first_date": "2026-07-09", "last_date": "2026-07-09"}}
+</script>
+
+<script>
+  // ── Global Charts ─────────────────────────────────────────────────────────
+  
+  const labels=["05-24", "05-25", "07-07", "07-08", "07-09"];
+  const d=[11026.0, 4535.0, 14490.0, 1478.0, 11784.0];
+  const c=[11026.0, 15561.0, 30051.0, 31529.0, 43313.0];
+  const opts={
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+          x:{grid:{color:"#1e293b"},ticks:{color:"#64748b",font:{size:10}}},
+          y:{grid:{color:"#1e293b"},ticks:{color:"#64748b"}}
+      }
+  };
+  new Chart(document.getElementById("barChart"),{type:"bar",data:{labels,datasets:[{data:d,backgroundColor:"#f9731666",borderColor:"#f97316",borderWidth:1,borderRadius:3}]},options:opts});
+  new Chart(document.getElementById("lineChart"),{type:"line",data:{labels,datasets:[{data:c,borderColor:"#f97316",backgroundColor:"#f9731622",fill:true,tension:.3,pointRadius:2}]},options:opts});
+  
+
+  // ── Modal NV Logic ─────────────────────────────────────────────────────────
+  let nvChartInstance = null;
+  const rawData = document.getElementById('nvDataJSON').textContent;
+  const nvData = JSON.parse(rawData || "{}");
+  const targetPerNV = 534.1;
+
+  function openNVModal(nvName) {
+      const data = nvData[nvName];
+      if (!data) return;
+
+      document.getElementById('modalNVName').textContent = nvName;
+      document.getElementById('modalNVSummary').textContent = `Tổng: ${data.total_qr_a4.toLocaleString()} A4 · ${data.total_ho_so.toLocaleString()} Hồ sơ`;
+
+      const days = Object.keys(data.per_day).filter(d => d !== 'unknown').sort();
+      // Lấy 14 ngày gần nhất có data
+      const recentDays = days.slice(-14);
+      const _labels = recentDays.map(d => d.substring(5)); // MM-DD
+      const values = recentDays.map(d => data.per_day[d].qr_a4);
+
+      const ctx = document.getElementById('nvChart').getContext('2d');
+      if (nvChartInstance) nvChartInstance.destroy();
+
+      nvChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: _labels,
+              datasets: [
+                  {
+                      label: 'A4 Thực tế',
+                      data: values,
+                      backgroundColor: '#60a5fa',
+                      borderRadius: 4,
+                      order: 2
+                  },
+                  {
+                      label: 'Mục tiêu ngày',
+                      data: Array(_labels.length).fill(targetPerNV),
+                      type: 'line',
+                      borderColor: '#f43f5e',
+                      borderWidth: 2,
+                      borderDash: [5, 5],
+                      pointRadius: 0,
+                      fill: false,
+                      order: 1
+                  }
+              ]
+          },
+          options: {
+              responsive: true, maintainAspectRatio: false,
+              plugins: { legend: { labels: { color: '#e2e8f0' } } },
+              scales: {
+                  y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                  x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+              }
+          }
+      });
+
+      document.getElementById('nvModal').style.display = 'flex';
+  }
+
+  function closeNVModal() {
+      document.getElementById('nvModal').style.display = 'none';
+  }
+</script>
 </body>
 </html>
