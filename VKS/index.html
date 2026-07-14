@@ -13,7 +13,7 @@
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
 header{background:linear-gradient(135deg,#1e3a5f,#1e293b);padding:20px 32px;border-bottom:1px solid var(--border)}
 header h1{font-size:20px;font-weight:700}
-.meta{color:var(--muted);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.meta{color:var(--muted);font-size:13px;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .container{max-width:1400px;margin:0 auto;padding:24px 32px}
 
 /* Source indicator */
@@ -31,7 +31,7 @@ header h1{font-size:20px;font-weight:700}
 .match-row{text-align:center;margin-bottom:20px;padding:12px;background:var(--surf);border-radius:8px;border:1px solid var(--border)}
 
 /* KPI */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
 .kpi{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:16px}
 .kpi .label{color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
 .kpi .value{font-size:24px;font-weight:700;margin:4px 0 2px}
@@ -41,17 +41,18 @@ header h1{font-size:20px;font-weight:700}
 .card h3{font-size:14px;font-weight:600;margin-bottom:14px;color:#e2e8f0}
 
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:900px){.grid-2,.source-strip{grid-template-columns:1fr}}
 
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+/* Table — scrollable on mobile */
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:4px}
+table{width:100%;min-width:420px;border-collapse:collapse;font-size:13px}
+th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500;white-space:nowrap}
 td{padding:9px 10px;border-bottom:1px solid #1e293b}
 tr:hover td{background:#1e293b66}
 .clickable-row{cursor:pointer;transition:background 0.2s}
 .clickable-row:hover td{background:#334155!important}
 
 /* Modal */
-.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;justify-content:center;align-items:center}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:100;justify-content:center;align-items:center;padding:16px}
 .modal-box{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:24px;width:90%;max-width:600px;box-shadow:0 10px 25px rgba(0,0,0,0.5)}
 .modal-header{display:flex;justify-content:space-between;margin-bottom:16px;align-items:flex-start}
 .modal-close{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
@@ -65,8 +66,27 @@ tr:hover td{background:#1e293b66}
 .progress-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#22c55e,#22c55ecc)}
 .progress-labels{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
 canvas{max-height:230px}
-.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:20px}
+.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:20px;padding:0 8px}
 .no-data{color:#64748b;font-style:italic;font-size:13px;padding:16px 0}
+
+/* Tablet ≤900px */
+@media(max-width:900px){
+  .grid-2,.source-strip{grid-template-columns:1fr}
+  .container{padding:16px 16px}
+  header{padding:16px 20px}
+}
+/* Mobile ≤600px */
+@media(max-width:600px){
+  header h1{font-size:17px}
+  .meta{font-size:12px;gap:6px}
+  .source-card .src-value{font-size:24px}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi{padding:12px}
+  .kpi .value{font-size:20px}
+  .card{padding:14px}
+  .modal-box{width:100%;border-radius:12px 12px 0 0;position:fixed;bottom:0;left:0;max-width:100%;padding:20px}
+  .modal-overlay{align-items:flex-end;padding:0}
+}
 </style>
 </head>
 <body>
@@ -80,7 +100,7 @@ canvas{max-height:230px}
   <div class="meta">
     <span>Deadline: <strong>2026-06-30</strong> (0 ngày)</span>
     <span style="background:#052e16;color:#86efac;border:1px solid #166534;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">✅ Hoàn thành</span>
-    <span>Cập nhật: 13/07/2026 19:09</span>
+    <span>Cập nhật: 14/07/2026 23:38</span>
     <span class="tag-na">Drive: chưa scan</span>
     <span class="tag-excel">🟠 Excel: 2025-12-19</span>
   </div>
@@ -136,7 +156,7 @@ canvas{max-height:230px}
     <!-- Excel table -->
     <div class="card">
       <h3>🟠 Chi tiết Excel — NV báo cáo</h3>
-      <table><thead><tr><th>NV</th><th style="text-align:right">HS</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th><th>Lần cuối</th><th style="text-align:center">vs Drive</th></tr></thead><tbody>
+      <div class="table-wrap"><table><thead><tr><th>NV</th><th style="text-align:right">HS</th><th style="text-align:right">QĐ A4</th><th style="text-align:right">%</th><th>Lần cuối</th><th style="text-align:center">vs Drive</th></tr></thead><tbody>
         <tr class="clickable-row" onclick="openNVModal('Diệu Linh')">
           <td style="font-weight:500;color:#e2e8f0">Diệu Linh</td>
           <td style="text-align:right">219</td>
@@ -232,12 +252,12 @@ canvas{max-height:230px}
           <td style="text-align:right;color:#94a3b8">2.9%</td>
           <td style="text-align:right;color:#94a3b8;font-size:12px">2025-12-19</td>
           <td style="text-align:center"><span style="color:#64748b;font-size:11px">—</span></td>
-        </tr></tbody></table>
+        </tr></tbody></table></div>
     </div>
   </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 13/07/2026 19:09
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF từ file PDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; Cập nhật 14/07/2026 23:38
   </div>
 </div>
 
