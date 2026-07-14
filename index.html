@@ -20,15 +20,18 @@ header .sub{color:var(--muted);font-size:13px;margin-top:4px}
 .kpi .val{font-size:28px;font-weight:700;margin:6px 0 2px}
 .kpi .sub{font-size:12px;color:var(--muted)}
 
-.legend{display:flex;gap:16px;margin-bottom:16px;font-size:12px;align-items:center}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;align-items:center}
 .tag-drive{background:#172554;color:#93c5fd;border:1px solid #3b82f680;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
 .tag-excel{background:#431407;color:#fdba74;border:1px solid #f9731680;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
 .tag-na{background:#1e293b;color:#64748b;border:1px solid #33415580;padding:3px 10px;border-radius:12px;font-size:11px}
 
 .card{background:var(--surf);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
 .card h2{font-size:16px;font-weight:600;margin-bottom:16px}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:500}
+
+/* Table — scrollable wrapper on mobile */
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px}
+table{width:100%;min-width:520px;border-collapse:collapse;font-size:14px}
+th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;font-weight:500;white-space:nowrap}
 td{padding:14px 12px;border-bottom:1px solid #1e293b;vertical-align:middle}
 tr:hover td{background:#1e293b66}
 
@@ -39,17 +42,36 @@ tr:hover td{background:#1e293b66}
 .proj-sources{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .pbar{background:#0f172a;border-radius:4px;height:8px;overflow:hidden;margin-bottom:6px}
 .proj-pct{font-size:12px;color:var(--muted);margin-bottom:12px}
-.proj-link{display:inline-block;background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:7px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500}
+.proj-link{display:block;text-align:center;background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:8px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500}
 .proj-link:hover{background:#1e40af}
 
-.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:24px}
-@media(max-width:768px){.kpi-row{grid-template-columns:1fr 1fr}.container{padding:20px}}
+.updated{color:var(--muted);font-size:11px;text-align:center;margin-top:24px;padding:0 8px}
+
+/* Tablet */
+@media(max-width:900px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .container{padding:24px 20px}
+  header{padding:20px 24px}
+}
+/* Mobile */
+@media(max-width:600px){
+  .kpi-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .kpi{padding:14px}
+  .kpi .val{font-size:22px}
+  .container{padding:16px 12px}
+  header{padding:16px}
+  header h1{font-size:18px}
+  .card{padding:16px}
+  /* Ẩn table trên phone — dùng card grid thay thế */
+  .table-section{display:none}
+  .proj-grid{margin-top:0;grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <header>
   <h1>📊 DocScan — Quản lý Số hóa Tài liệu</h1>
-  <div class="sub">Tổng hợp tất cả dự án · Cập nhật: 13/07/2026 19:09</div>
+  <div class="sub">Tổng hợp tất cả dự án · Cập nhật: 14/07/2026 23:38</div>
 </header>
 <div class="container">
 
@@ -66,7 +88,7 @@ tr:hover td{background:#1e293b66}
     </div>
     <div class="kpi">
       <div class="lbl">🟠 Excel NV (tổng)</div>
-      <div class="val" style="color:#fb923c">407,977</div>
+      <div class="val" style="color:#fb923c">364,664</div>
       <div class="sub">A4 NV báo cáo</div>
     </div>
     <div class="kpi">
@@ -83,20 +105,21 @@ tr:hover td{background:#1e293b66}
     <span class="tag-na">— = chưa có data</span>
   </div>
 
-  <div class="card">
+  <div class="card table-section">
     <h2>📋 Danh sách dự án</h2>
-    <table>
-      <thead><tr>
-        <th>Dự án</th><th>Số liệu</th><th>Deadline</th><th>Dashboard</th>
-      </tr></thead>
-      <tbody>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Dự án</th><th>Số liệu</th><th>Deadline</th><th>Dashboard</th>
+        </tr></thead>
+        <tbody>
         <tr>
           <td>
             <div style="font-weight:600;color:#e2e8f0">QN — HMT.SH.26.004.PLA.QN (4 xã/phường)</div>
             <div style="font-size:11px;color:#64748b">QN</div>
           </td>
           <td>
-            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px"><span class="tag-drive">🔵 25,739</span>&nbsp;<span class="tag-excel">🟠 43,313</span></div>
+            <div style="display:flex;gap:6px;align-items:center;margin-bottom:4px"><span class="tag-drive">🔵 25,739</span>&nbsp;<span class="tag-na">Excel: —</span></div>
             <div style="background:#0f172a;border-radius:4px;height:6px;overflow:hidden;width:160px">
               <div style="background:#3b82f6;width:5.1%;height:100%"></div>
             </div>
@@ -104,7 +127,7 @@ tr:hover td{background:#1e293b66}
           </td>
           <td style="color:#94a3b8;font-size:13px">
             2026-12-31
-            <div style="margin-top:8px"><span style="background:#022c22;color:#34d399;border:1px solid #064e3b;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">🟢 An toàn (171 ngày)</span></div>
+            <div style="margin-top:8px"><span style="background:#022c22;color:#34d399;border:1px solid #064e3b;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">🟢 An toàn (170 ngày)</span></div>
           </td>
           <td>
             <a href="./QN/" style="background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:500">Xem →</a>
@@ -130,7 +153,8 @@ tr:hover td{background:#1e293b66}
             <a href="./VKS/" style="background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:6px 14px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:500">Xem →</a>
           </td>
         </tr></tbody>
-    </table>
+      </table>
+    </div>
   </div>
 
   <div class="proj-grid">
@@ -144,7 +168,7 @@ tr:hover td{background:#1e293b66}
           
           <div style="display:flex;gap:8px;margin-bottom:16px">
             <span class="tag-drive" style="padding:4px 10px">🔵 Drive: 25,739</span>
-            <span class="tag-excel" style="padding:4px 10px">🟠 Excel: 43,313</span>
+            
           </div>
           
           <div style="background:#0f172a;border-radius:6px;height:8px;overflow:hidden;margin-bottom:8px">
@@ -154,7 +178,7 @@ tr:hover td{background:#1e293b66}
             <span>5.1%</span>
             <span>25,739 / 500,000 A4</span>
           </div>
-          <div style="margin-top:8px"><span style="background:#022c22;color:#34d399;border:1px solid #064e3b;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">🟢 An toàn (171 ngày)</span></div>
+          <div style="margin-top:8px"><span style="background:#022c22;color:#34d399;border:1px solid #064e3b;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700">🟢 An toàn (170 ngày)</span></div>
           
           <div style="margin-top:20px">
             <a href="./QN/" style="display:block;text-align:center;background:#1e3a5f;color:#93c5fd;border:1px solid #3b82f680;padding:8px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;transition:all 0.2s">Mở Dashboard →</a>
@@ -190,7 +214,7 @@ tr:hover td{background:#1e293b66}
         </div>
 
   <div class="updated">
-    🔵 Drive = số thực đếm bằng fitz/PyMuPDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; 13/07/2026 19:09
+    🔵 Drive = số thực đếm bằng fitz/PyMuPDF &nbsp;|&nbsp; 🟠 Excel = số NV tự báo cáo &nbsp;|&nbsp; 14/07/2026 23:38
   </div>
 </div>
 </body>
